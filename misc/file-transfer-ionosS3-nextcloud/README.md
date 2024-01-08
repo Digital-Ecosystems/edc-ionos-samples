@@ -28,76 +28,28 @@ In order to configure this example, please follow this steps:
 Local execution:
 
 ```bash
-java -Dedc.fs.config=example/file-transfer-between-2-nextcloud/consumer/resources/config.properties -jar example/file-transfer-between-2-nextcloud/consumer/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=./consumer/resources/config.properties -jar ./consumer/build/libs/connector.jar
 
-java -Dedc.fs.config=example/file-transfer-between-2-nextcloud/provider/resources/config.properties -jar example/file-transfer-between-2-nextcloud/provider/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=./provider/resources/config.properties -jar ./provider/build/libs/connector.jar
 ```
 
 We will have to call some URL's in order to transfer the file:
 
 1) Asset creation for the consumer
 ```console
-curl -d '{
-			"@context": {
-             "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
-           },
-            "@id": "assetId",
-		    "properties": {
-            },
-           "dataAddress": {
-             "type": "IonosS3",
-				"storage":"s3-eu-central-1.ionoscloud.com",
-				"bucketName": "company2",
-				"keyName" : "device1-data.csv"
-           }
-         }'  -H 'X-API-Key: password' \
+curl -d @jsons/asset.json -H 'X-API-Key: password' \
 		 -H 'content-type: application/json' http://localhost:8182/management/v3/assets
 ```
 
 2) Policy creation
 ```console
-curl -d '{
-                  "@context":{
-                        "edc":"https://w3id.org/edc/v0.0.1/ns/",
-                        "odrl":"http://www.w3.org/ns/odrl/2/"
-                     },
-                 "@id": "aPolicy",
-                 "policy": {
-                 "@type": "odrl:use",
-                   "odrl:prohibition":[
-                 {
-                     "odrl:target": "assetId",
-                      "odrl:action": {
-                             "odrl:type": "USE"
-                         },
-                         "odrl:edctype": "dataspaceconnector:prohibition",
-                 "odrl:constraint": [{
-                     "odrl:leftOperand": "downloadable",
-                     "odrl:operator": { 
-                          "@id": "odrl:eq"              
-                         },
-                     "odrl:rightOperand": "true",
-                     "odrl:comment": "if is downloadable "
-                   }
-                 ]
-                 }
-                 ]
-           }
-         }' -H 'X-API-Key: password' \
+curl -d @jsons/create-policy.json -H 'X-API-Key: password' \
 		 -H 'content-type: application/json' http://localhost:8182/management/v2/policydefinitions
 ```
 
 3) Contract creation
 ```console
-curl -d '{
-           "@context": {
-             "edc": "https://w3id.org/edc/v0.0.1/ns/"
-           },
-           "@id": "1",
-           "accessPolicyId": "aPolicy",
-           "contractPolicyId": "aPolicy",
-           "assetsSelector": []
-         }' -H 'X-API-Key: password' \
+curl -d @jsons/create-contract.json -H 'X-API-Key: password' \
  -H 'content-type: application/json' http://localhost:8182/management/v2/contractdefinitions
 ```
 
@@ -106,31 +58,42 @@ curl -d '{
 curl -X POST "http://localhost:9192/management/v2/catalog/dataset/request" \
 --header 'X-API-Key: password' \
 --header 'Content-Type: application/json' \
--d '{
-         "@context":{
-           "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
-         },
-         "@type": "DatasetRequest",
-         "@id": "assetId",
-         "counterPartyAddress":"http://localhost:8282/protocol",
-         "protocol":"dataspace-protocol-http"
-      }'
+-d @jsons/fetch-catalog.json
 ```
 You will have an answer like the following:
 ```
 {
-	"@type": "edc:ContractNegotiationDto",
-	"@id": "a88180b3-0d66-41b5-8376-c91d8253afcf",
-	"edc:type": "CONSUMER",
-	"edc:protocol": "dataspace-protocol-http",
-	"edc:state": "FINALIZED",
-	"edc:counterPartyAddress": "http://localhost:8282/protocol",
-	"edc:callbackAddresses": [],
-	"edc:contractAgreementId": "1:1:5c0a5d3c-69ea-4fb5-9d3d-e33ec280cde9",
+	"@id": "asset-1",
+	"@type": "dcat:Dataset",
+	"odrl:hasPolicy": {
+		"@id": "Y29udHJhY3QtMQ==:YXNzZXQtMQ==:MzIxMGUwNTQtYzYxYy00N2VhLTg4MmMtYTc0NTJmNDYxM2Fi",
+		"@type": "odrl:Set",
+		"odrl:permission": [],
+		"odrl:prohibition": {
+			"odrl:target": "asset-1",
+			"odrl:action": {
+				"odrl:type": "USE"
+			},
+			"odrl:constraint": {
+				"odrl:leftOperand": "downloadable",
+				"odrl:operator": {
+					"@id": "odrl:eq"
+				},
+				"odrl:rightOperand": "true"
+			}
+		},
+		"odrl:obligation": [],
+		"odrl:target": {
+			"@id": "asset-1"
+		}
+	},
+	"dcat:distribution": [],
+	"id": "asset-1",
 	"@context": {
-		"dct": "https://purl.org/dc/terms/",
+		"@vocab": "https://w3id.org/edc/v0.0.1/ns/",
 		"edc": "https://w3id.org/edc/v0.0.1/ns/",
 		"dcat": "https://www.w3.org/ns/dcat/",
+		"dct": "https://purl.org/dc/terms/",
 		"odrl": "http://www.w3.org/ns/odrl/2/",
 		"dspace": "https://w3id.org/dspace/v0.8/"
 	}
@@ -144,39 +107,7 @@ You will have an answer like the following:
 curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
 --header 'X-API-Key: password' \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"@context":{
-      "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
-     "odrl": "http://www.w3.org/ns/odrl/2/"
-   },
-   @type":"NegotiationInitiateRequestDto",
-   "counterPartyAddress":"http://localhost:8282/protocol",
-   "providerId":"consumer",
-   "protocol":"dataspace-protocol-http",
-   "policy":{
-      "@id":"{{offerId}}",
-      "@type": "odrl:Set",
-      "odrl:permission": [],
-      "odrl:prohibition": {
-            "odrl:target": "assetId",
-            "odrl:action": {
-                "odrl:type": "USE"
-            },
-            "odrl:constraint": {
-                "odrl:leftOperand": "downloadable",
-                "odrl:operator": {
-                    "@id": "odrl:eq"
-                },
-                "odrl:rightOperand": "true"
-            }
-        },
-        "odrl:obligation": [],
-        "odrl:target": {
-            "@id": "assetId"
-        }
-         
-      }
-}'
+-d @jsons/contract-negotiation.json
 ```
 
 Note: copy the `id` field;
@@ -220,23 +151,7 @@ Copy the value of the `contractAgreementId` from the response of the previous cu
 curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
 	--header 'X-API-Key: password' \
-    --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-			   "@type":"TransferRequestDto",
-               "connectorId":"provider",
-               "counterPartyAddress":"http://localhost:8282/protocol",
-               "protocol":"dataspace-protocol-http",
-               "contractId":"{{agreementId}}",
-               "assetId":"assetId",
-				"dataDestination": { 
-					"type": "Nextcloud",
-                    "filePath": "pl",
-                    "fileName": "device1-data.csv",
-                    "keyName" : "device1-data.csv"
-				}
-        }'
+    -d @jsons/transfer.json
 ```
 Note: copy the `id` field to do the deprovisioning;
 

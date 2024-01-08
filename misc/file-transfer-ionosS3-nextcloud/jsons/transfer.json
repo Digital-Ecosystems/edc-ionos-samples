@@ -1,0 +1,21 @@
+{
+   "@context":{
+      "edc":"https://w3id.org/edc/v0.0.1/ns/"
+   },
+   "@type":"TransferRequestDto",
+   "connectorId":"provider",
+   "counterPartyAddress":"http://localhost:8282/protocol",
+   "protocol":"dataspace-protocol-http",
+   "contractId":"{{agreementId}}",
+   "assetId":"asset-1",
+   "dataDestination":{
+
+              "type": "IonosS3",
+				"storage":"s3-eu-central-1.ionoscloud.com",
+				"bucketName": "company1",
+                "blobName": "device1-data-2.csv",
+               "keyName":"keyname-1"
+            
+
+   }
+}
