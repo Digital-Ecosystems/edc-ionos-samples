@@ -10,8 +10,9 @@
    "assetId":"asset-1",
    "dataDestination":{
        "type": "Nextcloud",
-				"filePath": "",
+				"filePath": "Test",
 				"fileName": "Nextcloud.png",
+                "receiverHttpEndpoint":"http://localhost:9192/management",
                 "keyName":"keyname-1"
    }
 }
