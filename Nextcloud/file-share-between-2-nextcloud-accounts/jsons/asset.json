@@ -1,0 +1,16 @@
+{
+			"@context": {
+            "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+           },
+          "@id":"asset-1",
+            "properties": {
+         },
+           "dataAddress": {
+            
+			 "type": "Nextcloud",
+				"filePath": "/",
+				"fileName": "Nextcloud.png",
+                "keyName":"keyname-1"
+            
+           }
+         }

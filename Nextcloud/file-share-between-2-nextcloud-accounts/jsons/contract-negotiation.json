@@ -1,0 +1,21 @@
+{
+   "@context":{
+      "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+     "odrl": "http://www.w3.org/ns/odrl/2/"
+   },
+   "@type":"NegotiationInitiateRequestDto",
+   "counterPartyAddress":"http://localhost:8282/protocol",
+   "providerId":"consumer",
+   "protocol":"dataspace-protocol-http",
+   "policy":{
+        "@id":"{{offerId}}",
+        "@type": "odrl:Set",
+        "odrl:permission": [],
+       "odrl:prohibition": [],
+        "odrl:obligation": [],
+        "odrl:target": {
+            "@id": "asset-1"
+        }
+         
+      }
+}
