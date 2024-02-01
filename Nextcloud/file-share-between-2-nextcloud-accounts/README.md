@@ -1,6 +1,6 @@
-#File transfer between two different clouds
+# File Share between 2 Nextcloud accounts
 
-This example shows how to exchange a data file between two EDC's using two different Nextcloud's: Nextcloud.
+This example shows how to share file/folder between two EDC's using two different Nextcloud Accounts.
 
 The consumer will use the Nextcloud and the provider will use Nextcloud.
 
