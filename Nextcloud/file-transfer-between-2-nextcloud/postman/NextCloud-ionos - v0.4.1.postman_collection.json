@@ -37,7 +37,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\t\t\"@context\": {\n            \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n          \"@id\":\"{{assetId}}\",\n            \"properties\": {\n         },\n           \"dataAddress\": {\n            \n\t\t\t \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"/\",\n\t\t\t\t\"fileName\": \"Nextcloud.png\",\n               \"keyName\":\"{{keynameid}}\"\n            \n           }\n         }"
+							"raw": "{\n\t\t\t\"@context\": {\n            \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n          \"@id\":\"{{assetId}}\",\n            \"properties\": {\n         },\n           \"dataAddress\": {\n            \n\t\t\t \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"/\",\n\t\t\t\t\"fileName\": \"flows.json\",\n               \"keyName\":\"{{keynameid}}\"\n            \n           }\n         }"
 						},
 						"url": {
 							"raw": "http://localhost:8182/management/v3/assets",
@@ -86,7 +86,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\",\n      \"odrl\":\"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@id\":\"policy-{{$randomInt}}\",\n   \"policy\": {\n    \"@type\": \"odrl:use\",\n    \"odrl:prohibition\":[\n        {\n            \"odrl:target\": \"{{assetId}}\",\n             \"odrl:action\": {\n                    \"odrl:type\": \"USE\"\n                },\n                \"odrl:edctype\": \"dataspaceconnector:prohibition\",\n        \"odrl:constraint\": [{\n            \"odrl:leftOperand\": \"downloadable\",\n            \"odrl:operator\": { \n                 \"@id\": \"odrl:eq\"              \n                },\n            \"odrl:rightOperand\": \"false\",\n            \"odrl:comment\": \"if is downloadable \"\n          }\n        ]\n        }\n        ]\n  }\n}"
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\",\n      \"odrl\":\"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@id\":\"policy-{{$randomInt}}\",\n   \"policy\": {\n    \"@type\": \"odrl:use\",\n    \"odrl:prohibition\":[\n        \n        ], \"extensibleProperties\":{\n                \n                \"downloadable\":\"true\"\n            }\n\n  }\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8182/management/v2/policydefinitions",
@@ -237,7 +237,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n     \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@type\":\"NegotiationInitiateRequestDto\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"providerId\":\"consumer\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"policy\":{\n        \"@id\":\"{{offerId}}\",\n        \"@type\": \"odrl:Set\",\n        \"odrl:permission\": [],\n       \"odrl:prohibition\": {\n            \"odrl:target\": \"{{assetId}}\",\n            \"odrl:action\": {\n                \"odrl:type\": \"USE\"\n            },\n            \"odrl:constraint\": {\n                \"odrl:leftOperand\": \"downloadable\",\n                \"odrl:operator\": {\n                    \"@id\": \"odrl:eq\"\n                },\n                \"odrl:rightOperand\": \"false\"\n            }\n        },\n        \"odrl:obligation\": [],\n        \"odrl:target\": {\n            \"@id\": \"{{assetId}}\"\n        }\n         \n      }\n}",
+							"raw": "{\n   \"@context\":{\n      \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n     \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@type\":\"NegotiationInitiateRequestDto\",\n    \"connectorAddress\":\"http://localhost:8282/protocol\", \n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"providerId\":\"provider\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"policy\":{\n        \"@id\":\"{{offerId}}\",\n        \"@type\": \"odrl:Set\",\n        \"odrl:permission\": [],\n       \"odrl:prohibition\": [],\n        \"odrl:obligation\": [],\n        \"odrl:target\": {\n            \"@id\": \"{{assetId}}\"\n        }\n         \n      }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -355,7 +355,482 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@type\":\"TransferRequestDto\",\n   \"connectorId\":\"provider\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"contractId\":\"{{agreementId}}\",\n   \"assetId\":\"{{assetId}}\",\n   \"dataDestination\":{\n       \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"pl\",\n\t\t\t\t\"fileName\": \"Readme.md\",\n                \"keyName\":\"{{keynameid}}\"\n   }\n}",
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@type\":\"TransferRequestDto\",\n   \"connectorId\":\"provider\",\n   \"counterPartyAddress\":\"http://localhost:9292/protocol\",\n   \"connectorAddress\": \"http://localhost:8282/protocol\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"contractId\":\"{{agreementId}}\",\n   \"assetId\":\"{{assetId}}\",\n   \"dataDestination\":{\n     \"@type\": \"DataAddress\",\n       \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"example\",\n\t\t\t\t\"fileName\": \"transferjson.json\",\n                \"receiverHttpEndpoint\" : \"http://localhost:9192/management\",\n                \"keyName\":\"{{keynameid}}\"\n   }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9192/management/v2/transferprocesses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9192",
+							"path": [
+								"management",
+								"v2",
+								"transferprocesses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer - Transfer Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.to.have.status(200)) {",
+									"  var data = JSON.parse(responseBody);",
+									"  pm.environment.set(\"transferId\", data[\"@id\"]);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:9192/management/v2/transferprocesses/{{transferId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9192",
+							"path": [
+								"management",
+								"v2",
+								"transferprocesses",
+								"{{transferId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer - Asset Deprovision",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:9192/management/v2/transferprocesses/{{transferId}}/deprovision",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9192",
+							"path": [
+								"management",
+								"v2",
+								"transferprocesses",
+								"{{transferId}}",
+								"deprovision"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transfer_ionosS3-Nextcloud",
+			"item": [
+				{
+					"name": "Provider - Regist_Asset Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"keynameid\", \"\"+String((new Date()).getTime()).replace(/\\compD/gi,'').substring(7));\r",
+									"pm.environment.set(\"assetId\", \"asset-\"+String((new Date()).getTime()).replace(/\\compD/gi,'').substring(7));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\t\"@context\": {\n            \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n          \"@id\":\"{{assetId}}\",\n            \"properties\": {\n         },\n           \"dataAddress\": {\n                \t\"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"pl\",\n\t\t\t\t\"fileName\": \"device1-data.csv\",\n                \"keyName\":\"{{keynameid}}\"\n\n                \n\n           }\n         }"
+						},
+						"url": {
+							"raw": "http://localhost:8182/management/v3/assets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8182",
+							"path": [
+								"management",
+								"v3",
+								"assets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provider - policy_creation Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.to.have.status(200)) {\r",
+									"  var data = JSON.parse(responseBody);\r",
+									"  pm.environment.set(\"policyId\", data[\"@id\"]);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\",\n      \"odrl\":\"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@id\":\"policy-{{$randomInt}}\",\n   \"policy\": {\n    \"@type\": \"odrl:use\",\n    \"odrl:prohibition\":[\n        {\n            \"odrl:target\": \"{{assetId}}\",\n             \"odrl:action\": {\n                    \"odrl:type\": \"USE\"\n                },\n                \"odrl:edctype\": \"dataspaceconnector:prohibition\",\n        \"odrl:constraint\": [{\n            \"odrl:leftOperand\": \"downloadable\",\n            \"odrl:operator\": { \n                 \"@id\": \"odrl:eq\"              \n                },\n            \"odrl:rightOperand\": \"false\",\n            \"odrl:comment\": \"if is downloadable \"\n          }\n        ]\n        }\n        ]\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8182/management/v2/policydefinitions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8182",
+							"path": [
+								"management",
+								"v2",
+								"policydefinitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provider - contract_creation Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@id\":\"contract-{{$randomInt}}\",\n   \"accessPolicyId\":\"{{policyId}}\",\n   \"contractPolicyId\":\"{{policyId}}\",\n   \"assetsSelector\":[]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8182/management/v2/contractdefinitions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8182",
+							"path": [
+								"management",
+								"v2",
+								"contractdefinitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer - Catalog Fetch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.to.have.status(200)) {",
+									"  var data = JSON.parse(responseBody);",
+									"  pm.environment.set(\"offerId\", data[\"odrl:hasPolicy\"][\"@id\"]);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"@context\":{\n     \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@type\": \"DatasetRequest\",\n   \"@id\": \"{{assetId}}\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"protocol\":\"dataspace-protocol-http\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9192/management/v2/catalog/dataset/request",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9192",
+							"path": [
+								"management",
+								"v2",
+								"catalog",
+								"dataset",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer - Contract Negotiation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.to.have.status(200)) {",
+									"  var data = JSON.parse(responseBody);",
+									"  pm.environment.set(\"negociationId\", data[\"@id\"]);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"@context\":{\n      \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n     \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@type\":\"NegotiationInitiateRequestDto\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"providerId\":\"consumer\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"policy\":{\n        \"@id\":\"{{offerId}}\",\n        \"@type\": \"odrl:Set\",\n        \"odrl:permission\": [],\n       \"odrl:prohibition\": {\n            \"odrl:target\": \"{{assetId}}\",\n            \"odrl:action\": {\n                \"odrl:type\": \"USE\"\n            },\n            \"odrl:constraint\": {\n                \"odrl:leftOperand\": \"downloadable\",\n                \"odrl:operator\": {\n                    \"@id\": \"odrl:eq\"\n                },\n                \"odrl:rightOperand\": \"true\"\n            }\n        },\n        \"odrl:obligation\": [],\n        \"odrl:target\": {\n            \"@id\": \"{{assetId}}\"\n        }\n         \n      }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9192/management/v2/contractnegotiations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9192",
+							"path": [
+								"management",
+								"v2",
+								"contractnegotiations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer - Contract Agreement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.to.have.status(200)) {",
+									"  var data = JSON.parse(responseBody);",
+									"  pm.environment.set(\"agreementId\", data[\"contractAgreementId\"]);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:9192/management/v2/contractnegotiations/:negociationId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9192",
+							"path": [
+								"management",
+								"v2",
+								"contractnegotiations",
+								":negociationId"
+							],
+							"variable": [
+								{
+									"key": "negociationId",
+									"value": "{{negociationId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer - Asset Transfering - File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.to.have.status(200)) {",
+									"  var data = JSON.parse(responseBody);",
+									"  pm.environment.set(\"transferId\", data[\"@id\"]);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "password",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@type\":\"TransferRequestDto\",\n   \"connectorId\":\"provider\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"contractId\":\"{{agreementId}}\",\n   \"assetId\":\"{{assetId}}\",\n   \"dataDestination\":{\n\n             \n               \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"pl\",\n\t\t\t\t\"fileName\": \"device1-data.csv\",\n                  \"receiverHttpEndpoint\" : \"http://localhost:9192/management\",\n                \"keyName\":\"{{keynameid}}\"\n\n            \n\n   }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -512,7 +987,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\t\t\"@context\": {\n            \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n          \"@id\":\"{{assetId}}\",\n            \"properties\": {\n         },\n           \"dataAddress\": {\n            \n\t\t\t \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"/\",\n\t\t\t\t\"fileName\": \"flows.json\",\n               \"keyName\":\"{{keynameid}}\"\n            \n           }\n         }"
+							"raw": "{\n\t\t\t\"@context\": {\n            \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n           },\n          \"@id\":\"{{assetId}}\",\n            \"properties\": {\n         },\n           \"dataAddress\": {\n            \n\t\t\t \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"Templates\",\n\t\t\t\t\"fileName\": \"\",\n               \"keyName\":\"{{keynameid}}\"\n            \n           }\n         }"
 						},
 						"url": {
 							"raw": "http://localhost:8182/management/v3/assets",
@@ -561,7 +1036,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\",\n      \"odrl\":\"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@id\":\"policy-{{$randomInt}}\",\n   \"policy\": {\n    \"@type\": \"odrl:use\",\n    \"odrl:prohibition\":[\n        {\n            \"odrl:target\": \"{{assetId}}\",\n             \"odrl:action\": {\n                    \"odrl:type\": \"USE\"\n                },\n                \"odrl:edctype\": \"dataspaceconnector:prohibition\",\n        \"odrl:constraint\": [{\n            \"odrl:leftOperand\": \"downloadable\",\n            \"odrl:operator\": { \n                 \"@id\": \"odrl:eq\"              \n                },\n            \"odrl:rightOperand\": \"false\",\n            \"odrl:comment\": \"if is downloadable \"\n          }\n        ]\n        }\n        ]\n  }\n}"
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\",\n      \"odrl\":\"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@id\":\"policy-{{$randomInt}}\",\n   \"policy\": {\n        \"@type\": \"odrl:use\",\n        \"odrl:prohibition\":[],\n        \"odrl:obligation\":[],\n        \"odrl:permission\":[]   ,\n        \"extensibleProperties\":{\n                \"shareWith\":\"user2\",\n                \"shareType\": \"0\",\n                \"permissionType\":\"1\",\n                \"expirationTime\":\"1\",\n                \"downloadable\":\"false\"\n        }\n  }\n  \n\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8182/management/v2/policydefinitions",
@@ -595,7 +1070,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@id\":\"contract-{{$randomInt}}\",\n   \"accessPolicyId\":\"{{policyId}}\",\n   \"contractPolicyId\":\"{{policyId}}\",\n   \"assetsSelector\":[]\n}"
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@id\":\"contract-{{$randomInt}}\",\n   \"accessPolicyId\":\"{{policyId}}\",\n   \"contractPolicyId\":\"{{policyId}}\",\n   \"assetsSelector\":[]\n   \n}"
 						},
 						"url": {
 							"raw": "http://localhost:8182/management/v2/contractdefinitions",
@@ -712,7 +1187,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n     \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@type\":\"NegotiationInitiateRequestDto\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"providerId\":\"consumer\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"policy\":{\n        \"@id\":\"{{offerId}}\",\n        \"@type\": \"odrl:Set\",\n        \"odrl:permission\": [],\n       \"odrl:prohibition\": {\n            \"odrl:target\": \"{{assetId}}\",\n            \"odrl:action\": {\n                \"odrl:type\": \"USE\"\n            },\n            \"odrl:constraint\": {\n                \"odrl:leftOperand\": \"downloadable\",\n                \"odrl:operator\": {\n                    \"@id\": \"odrl:eq\"\n                },\n                \"odrl:rightOperand\": \"false\"\n            }\n        },\n        \"odrl:obligation\": [],\n        \"odrl:target\": {\n            \"@id\": \"{{assetId}}\"\n        }\n         \n      }\n}",
+							"raw": "{\n   \"@context\":{\n      \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n     \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n   },\n   \"@type\":\"NegotiationInitiateRequestDto\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"providerId\":\"provider\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"policy\":{\n        \"@id\":\"{{offerId}}\",\n        \"@type\": \"odrl:Set\",\n        \"odrl:permission\": [],\n        \"odrl:prohibition\": [],\n        \"odrl:obligation\": [],\n        \"odrl:target\": {\n            \"@id\": \"{{assetId}}\"\n        }\n         \n      }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -830,7 +1305,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@type\":\"TransferRequestDto\",\n   \"connectorId\":\"provider\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"contractId\":\"{{agreementId}}\",\n   \"assetId\":\"{{assetId}}\",\n   \"dataDestination\":{\n       \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"/\",\n\t\t\t\t\"fileName\": \"flows.json\",\n                \"keyName\":\"{{keynameid}}\"\n   }\n}",
+							"raw": "{\n   \"@context\":{\n      \"edc\":\"https://w3id.org/edc/v0.0.1/ns/\"\n   },\n   \"@type\":\"TransferRequestDto\",\n   \"connectorId\":\"provider\",\n   \"counterPartyAddress\":\"http://localhost:8282/protocol\",\n   \"protocol\":\"dataspace-protocol-http\",\n   \"contractId\":\"{{agreementId}}\",\n   \"assetId\":\"{{assetId}}\",\n   \"dataDestination\":{\n       \t\t \"type\": \"Nextcloud\",\n\t\t\t\t\"filePath\": \"Templates\",\n\t\t\t\t\"fileName\": \"Nextclouddsd.png\",\n               \"keyName\":\"{{keynameid}}\"\n   }\n}",
 							"options": {
 								"raw": {
 									"language": "json"

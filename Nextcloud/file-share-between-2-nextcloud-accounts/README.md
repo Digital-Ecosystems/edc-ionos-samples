@@ -1,10 +1,10 @@
-# File transfer between two different clouds
+# File Share between two different nextcloud accounts
 
-This example shows how to exchange a data file between two EDC's using two different Nextcloud's instances.
+This example shows how to share a data file between two EDC's using two different Nextcloud's accounts.
 
 The consumer will use the Nextcloud and the provider will use Nextcloud.
 
-It is based on EDC example and it will execute the connector locally.
+It is based on EDC example, and it will execute the connector locally.
 
 ## Requirements
 
@@ -23,11 +23,11 @@ Just check the `Building and Running` section of the [official Ionos Nextcloud e
 ### Configuration
 In order to configure this example, please follow this steps:
 
-| Parameter name                          | Description| Mandatory |
-|-----------------------------------------|--------------|--|
-| `edc.ionos.nextcloud.username`                   | Nexcloud Username          | Yes |
-| `edc.ionos.nextcloud.password`             | Nexcloud Password          | Yes |
-| `edc.ionos.nextcloud.endpoint`    | Nexcloud endpoint address  |Yes  |
+| Parameter name                     | Description| Mandatory      |
+|------------------------------------|--------------|----------------|
+| `edc.ionos.nextcloud.username`     | Nexcloud Username       | Yes     |
+| `edc.ionos.nextcloud.password`     | Nexcloud Password       | Yes     |
+| `edc.ionos.nextcloud.endpoint`     | Nexcloud endpoint address | Yes   |
 
 ## Usage
 
@@ -148,7 +148,7 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     -d @jsons/transfer.json
 ```
 
-Go to nextcloud and check if the file was transferred.
+Go to nextcloud and check if the file was share with you.
 
 Note: copy the `id` field to do the deprovisioning;
 

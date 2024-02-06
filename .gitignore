@@ -1,2 +1,6 @@
+
+/Nextcloud/file-transfer-between-2-nextcloud/consumer/build/*
+/Nextcloud/file-transfer-between-2-nextcloud/provider/build/*
 .gradle/
 build/
+

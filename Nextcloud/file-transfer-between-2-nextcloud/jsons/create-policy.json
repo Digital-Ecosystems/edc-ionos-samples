@@ -1,28 +1,14 @@
 {
-   "@context":{
-      "edc":"https://w3id.org/edc/v0.0.1/ns/",
-      "odrl":"http://www.w3.org/ns/odrl/2/"
-   },
-   "@id":"policy-1",
-   "policy": {
+  "@context":{
+    "edc":"https://w3id.org/edc/v0.0.1/ns/",
+    "odrl":"http://www.w3.org/ns/odrl/2/"
+  },
+  "@id":"policy-1",
+  "policy": {
     "@type": "odrl:use",
-    "odrl:prohibition":[
-        {
-            "odrl:target": "asset-1",
-             "odrl:action": {
-                    "odrl:type": "USE"
-                },
-                "odrl:edctype": "dataspaceconnector:prohibition",
-        "odrl:constraint": [{
-            "odrl:leftOperand": "downloadable",
-            "odrl:operator": { 
-                 "@id": "odrl:eq"              
-                },
-            "odrl:rightOperand": "true",
-            "odrl:comment": "if is downloadable "
-          }
-        ]
-        }
-        ]
+    "odrl:prohibition": [],
+    "extensibleProperties": {
+      "downloadable": "true"
+    }
   }
 }
