@@ -38,5 +38,5 @@ Example of a file share between two EDC's using two different Nextcloud's accoun
 Example of a file transfer between two EDC's using two different Nextcloud's instances.
 
 ## MISC
-### ['file-transfer-ionosS3-nextcloud'](./misc/file-transfer-ionosS3-nextcloud)
+### [`file-transfer-ionosS3-nextcloud`](./misc/file-transfer-ionosS3-nextcloud)
 Example of a file transfer between 2 connectors with one using IONOS S3 extension and the other using Nextcloud extension.
