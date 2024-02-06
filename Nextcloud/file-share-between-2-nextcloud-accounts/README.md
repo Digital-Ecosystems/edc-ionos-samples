@@ -1,10 +1,10 @@
-# File Share between 2 Nextcloud accounts
+# File Share between two different nextcloud accounts
 
-This example shows how to share file/folder between two EDC's using two different Nextcloud Accounts.
+This example shows how to share a data file between two EDC's using two different Nextcloud's accounts.
 
 The consumer will use the Nextcloud and the provider will use Nextcloud.
 
-It is based on [this](https://github.com/eclipse-edc/Samples/blob/main/transfer/transfer-05-file-transfer-cloud/README.md) EDC example and it will execute the connector locally.
+It is based on EDC example, and it will execute the connector locally.
 
 ## Requirements
 
@@ -18,7 +18,16 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the previous [readme](../../README.md).
+Just check the `Building and Running` section of the [official Ionos Nextcloud extension repository](https://github.com/Digital-Ecosystems/edc-ionos-nextcloud?tab=readme-ov-file#building-and-running).
+
+### Configuration
+In order to configure this example, please follow this steps:
+
+| Parameter name                     | Description| Mandatory      |
+|------------------------------------|--------------|----------------|
+| `edc.ionos.nextcloud.username`     | Nexcloud Username       | Yes     |
+| `edc.ionos.nextcloud.password`     | Nexcloud Password       | Yes     |
+| `edc.ionos.nextcloud.endpoint`     | Nexcloud endpoint address | Yes   |
 
 ## Usage
 
@@ -44,17 +53,6 @@ curl -d @jsons/create-policy.json -H 'X-API-Key: password' \
 		 -H 'content-type: application/json' http://localhost:8182/management/v2/policydefinitions
 ```
 
-<details><summary>Policy configuration</summary>
-
-| Parameter name       | Description                      | Option's                                                                                                       | Mandatory                                            |
-|----------------------|----------------------------------|----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| `shareWith`          | Identification of user we want to share | user / group id / email address / circleID / conversation name with which the file should be shared            | Yes                                                  |
-| `shareType`          | Type of sharing, this option must match the previous option, for example: if choosing 'user,' then shareType should be 0; if choosing 'email address,' then shareType should be 4.                 | 0 = user; 1 = group; 3 = public link; 4 = email; 6 = federated cloud share; 7 = circle; 10 = Talk conversation | Yes             |
-| `permissionType`    |   Permission level, if the user can only read the file, then permissionType=1; if the user can update the file/folder, then permissionType=2.                         | 1 = read; 2 = update; 4 = create; 8 = delete; 16 = share; 31 = all (default: 31, for public shares: 1          | Yes |
-| `expirationTime` |          set a expire date for public link shares. This argument expects a well formatted date string, e.g. ‘YYYY-MM-DD’                        | -                                                                                                              | Yes                |
-</details>
-
-
 3) Contract creation
 ```console
 curl -d @jsons/create-contract.json -H 'X-API-Key: password' \
@@ -78,6 +76,11 @@ You will have an answer like the following:
 		"@type": "odrl:Set",
 		"odrl:permission": [],
 		"odrl:prohibition": [],
+		"odrl:obligation": [],
+		"odrl:target": {
+			"@id": "asset-1"
+		}
+	},
 	"dcat:distribution": [],
 	"id": "asset-1",
 	"@context": {
@@ -92,7 +95,7 @@ You will have an answer like the following:
 ```
 
 5) Contract negotiation
-   Copy the `policy{ @id` from the response of the first curl into this curl and execute it.
+   Copy the `"odrl:hasPolicy:{ @id` from the response of the first curl into this curl and execute it.
 
 ```
 curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
@@ -144,6 +147,9 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
 	--header 'X-API-Key: password' \
     -d @jsons/transfer.json
 ```
+
+Go to nextcloud and check if the file was share with you.
+
 Note: copy the `id` field to do the deprovisioning;
 
 8) Deprovisioning
