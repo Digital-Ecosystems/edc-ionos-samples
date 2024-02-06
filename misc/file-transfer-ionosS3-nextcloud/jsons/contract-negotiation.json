@@ -7,27 +7,14 @@
    "counterPartyAddress":"http://localhost:8282/protocol",
    "providerId":"consumer",
    "protocol":"dataspace-protocol-http",
-   "policy":{
-        "@id":"{{offerId}}",
-        "@type": "odrl:Set",
-        "odrl:permission": [],
-       "odrl:prohibition": {
-            "odrl:target": "asset-1",
-            "odrl:action": {
-                "odrl:type": "USE"
-            },
-            "odrl:constraint": {
-                "odrl:leftOperand": "downloadable",
-                "odrl:operator": {
-                    "@id": "odrl:eq"
-                },
-                "odrl:rightOperand": "true"
-            }
-        },
-        "odrl:obligation": [],
-        "odrl:target": {
-            "@id": "asset-1"
-        }
-         
+    "policy":{
+      "@id":"{{offerId}}",
+      "@type": "odrl:Set",
+      "odrl:permission": [],
+      "odrl:prohibition": [],
+      "odrl:obligation": [],
+      "odrl:target": {
+        "@id": "asset-1"
       }
+  }
 }
