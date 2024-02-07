@@ -1,42 +1,26 @@
 # IONOS EDC EXAMPLES
-This repository contains examples of how to use the IONOS EDC (Ionos S3 extension, Nextcloud extension)
+
+This repository provides samples for the Eclipse Dataspace Components, namely the Connector, using 2 extensions associated to technologies from IONOS: [S3 Storage](https://cloud.ionos.com/storage/object-storage) and [Nextcloud](https://www.ionos.com/cloud/cloud-apps/nextcloud). The samples are divided by technologies and also a mixed one using both technologies. 
 
 
+## Requirements
 
-## Ionos S3 Extension
+In order to run the samples, some requirments have to be satisfied. Check the requirement [page](https://www.github.com/ionos-cloud/edc-ionos-s3) to know more. 
 
-### [`file-transfer-multicloud`](./S3/file-transfer-multicloud)
+The samples of the repo are based on the IONOS Extensions for the EDC:
+- [IONOS S3 Storage](https://www.github.com/ionos-cloud/edc-ionos-s3)
+- [Nextcloud](https://www.github.com/ionos-cloud/edc-ionos-nextcloud)
 
-Example of a file transfer between 1 connector using Azure Storage and another connector using IONOS S3.
+## Folder description
 
-### [`file-transfer-multiple-instances`](./S3/file-transfer-multiple-instances)
+### Nextcloud
 
-Example of a file transfer between 2 deployed connectors, using terraform script and the IONOS Cloud.
+Samples of transfering a file and sharing a file inside a Dataspace.
 
-### [`file-transfer-persistence`](./S3/file-transfer-persistence)
+### S3
 
-Example of a file transfer between 2 connectors with both of them having IONOS S3 extension and PostgreSQL database to persist the EDC's internal data.
+Samples of transfering a file inside a Dataspace using the IONOS S3 and another cloud provider.
 
-### [`file-transfer-pull`](./S3/file-transfer-pull)
+### misc
 
-Example of a file transfer between 1 standard connector and another one using the IONOS S3 extension.
-
-### [`file-transfer-push`](./S3/file-transfer-push)
-
-Example of a file transfer between 2 connectors with both of them having IONOS S3 extension.
-
-### [`file-trasfer-push-daps`](./S3/file-trasfer-push-daps)
-
-Example of a file transfer using DAPS
-
-## Ionos Nextcloud Extension
-
-### [`file-share-between-2-nextcloud-accounts`](./Nextcloud/file-share-between-2-nextcloud-accounts)
-Example of a file share between two EDC's using two different Nextcloud's accounts.
-
-### [`file-transfer-between-2-nextcloud`](./Nextcloud/file-transfer-between-2-nextcloud)
-Example of a file transfer between two EDC's using two different Nextcloud's instances.
-
-## MISC
-### [`file-transfer-ionosS3-nextcloud`](./misc/file-transfer-ionosS3-nextcloud)
-Example of a file transfer between 2 connectors with one using IONOS S3 extension and the other using Nextcloud extension.
+Samples of transfering a file inside a Dataspace between the IONOS S3 and the Nextcloud storage.
