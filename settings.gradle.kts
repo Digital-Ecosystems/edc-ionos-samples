@@ -18,5 +18,7 @@ include(":S3:file-transfer-multicloud:consumer")
 //Nextcloud
 include(":Nextcloud:file-transfer-between-2-nextcloud:consumer")
 include(":Nextcloud:file-transfer-between-2-nextcloud:provider")
+include(":Nextcloud:file-share-between-2-nextcloud-accounts:consumer")
+include(":Nextcloud:file-share-between-2-nextcloud-accounts:provider")
 include(":misc:file-transfer-ionosS3-nextcloud:consumer")
 include(":misc:file-transfer-ionosS3-nextcloud:provider")

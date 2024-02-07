@@ -1,15 +1,13 @@
 # File transfer between two different clouds
 
-This example shows how to exchange a data file between two EDC's using two different Nextcloud's instances.
-
-The consumer will use the Nextcloud and the provider will use Nextcloud.
+This example shows how to `transfer` a file between two EDC's using two instances of Nextcloud.
 
 It is based on EDC example and it will execute the connector locally.
 
 ## Requirements
 
 You will need the following:
-- Nextcloud account;
+- Nextcloud account from IONOS or run it locally;
 - Java Development Kit (JDK) 17 or higher;
 - Docker;
 - GIT;
@@ -18,16 +16,18 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the [official Ionos Nextcloud extension repository](https://github.com/Digital-Ecosystems/edc-ionos-nextcloud?tab=readme-ov-file#building-and-running).
+Just check the `Building and Running` section of the [official Ionos Nextcloud extension repository](https://github.com/ionos-cloud/edc-ionos-nextcloud?tab=readme-ov-file#building-and-running).
 
 ### Configuration
-In order to configure this example, please follow this steps:
 
-| Parameter name                          | Description| Mandatory |
-|-----------------------------------------|--------------|--|
-| `edc.ionos.nextcloud.username`                   | Nexcloud Username          | Yes |
-| `edc.ionos.nextcloud.password`             | Nexcloud Password          | Yes |
-| `edc.ionos.nextcloud.endpoint`    | Nexcloud endpoint address  |Yes  |
+In order to run this sample, you need to edit the `config.properties` file with the following parameters:
+
+| Parameter name                     | Description| Mandatory      |
+|------------------------------------|--------------|----------------|
+| `edc.ionos.nextcloud.username`     | Nexcloud Username       | Yes     |
+| `edc.ionos.nextcloud.password`     | Nexcloud Password       | Yes     |
+| `edc.ionos.nextcloud.endpoint`     | Nexcloud endpoint address (the URL of Nextcloud) | Yes   |
+
 
 ## Usage
 
@@ -39,7 +39,7 @@ java -Dedc.fs.config=./consumer/resources/config.properties -jar ./consumer/buil
 java -Dedc.fs.config=./provider/resources/config.properties -jar ./provider/build/libs/connector.jar
 ```
 
-We will have to call some URL's in order to transfer the file:
+We will have to call some URL's in order to share the file. The payload of some curl commands is kept in some Json files inside the `jsons`folder.
 
 1) Asset creation for the consumer
 ```console
@@ -148,12 +148,5 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     -d @jsons/transfer.json
 ```
 
-Go to nextcloud and check if the file was transferred.
+Go to the Nextcloud associated with the consumer and check if the file was well transferred.
 
-Note: copy the `id` field to do the deprovisioning;
-
-8) Deprovisioning
-
-```
-curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v2/transferprocesses/{<ID>}/deprovision"
-```
