@@ -34,9 +34,16 @@ In order to configure this example, please follow this steps:
 5) Copy the required configuration fields:  
    Consumer: open the `s3/folder-transfer-push/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;   
    Provider: open the `s3/folder-transfer-push/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
+```console
+edc.ionos.access.key = <YOUR-KEY>
+edc.ionos.secret.key = <YOUR-SECRET-KEY>
+edc.ionos.endpoint = <IONOS-ENDPOINT>
+edc.ionos.token = <IONOS-TOKEN>
+```
 
 `Hashicorp Vault`
 ```console
+
 edc.vault.hashicorp.url=<VAULT_ADDRESS:VAULT_PORT>
 edc.vault.hashicorp.token=<ROOT_TOKEN>
 edc.vault.hashicorp.timeout.seconds=30
@@ -255,8 +262,9 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
 				}
         }'
 ```
-Note_1: for more details about dataDestination fields, please take a look at the [documentation](url)
-Note_2: copy the `id` field to do the deprovisioning;
+Note 1: for more details about dataDestination fields, please take a look at the [documentation](url)
+
+Note 2: copy the `id` field to do the deprovisioning;
 
 Accessing the bucket on the IONOS S3, you will see the `device1-data.csv` file.
 
