@@ -65,10 +65,7 @@ dependencies {
 	
 	implementation("${edcGroup}:vault-hashicorp:${edcVersion}")	
 
-	
-	
-	//implementation("$edcGroup:ids:+")
-		
+
 	implementation("${edcGroup}:iam-mock:${edcVersion}")
 	
     implementation(project(":S3:file-transfer-push:transfer-file"))

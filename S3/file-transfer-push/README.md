@@ -27,8 +27,8 @@ In order to configure this sample, please follow this steps:
 3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `example/file-transfer-push/device1-data.csv`;
 4) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
 5) Copy the required configuration fields:  
-Consumer: open the `example/file-transfer-push/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;   
-Provider: open the `example/file-transfer-push/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
+Consumer: open the `s3/file-transfer-push/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;   
+Provider: open the `s3/file-transfer-push/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 
@@ -37,8 +37,8 @@ Note: by design, S3 technology allows only unique names for the buckets. You may
 
 Local execution:
 ```bash
-java -Dedc.fs.config=example/file-transfer-push/consumer/resources/consumer-config.properties -jar example/file-transfer-push/consumer/build/libs/dataspace-connector.jar
-java -Dedc.fs.config=example/file-transfer-push/provider/resources/provider-config.properties -jar example/file-transfer-push/provider/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=s3/file-transfer-push/consumer/resources/consumer-config.properties -jar s3/file-transfer-push/consumer/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=s3/file-transfer-push/provider/resources/provider-config.properties -jar s3/file-transfer-push/provider/build/libs/dataspace-connector.jar
 ```
 
 or
