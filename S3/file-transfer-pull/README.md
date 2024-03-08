@@ -23,8 +23,8 @@ In order to configure this sample, please follow this steps:
 (We will use the [DCD](https://dcd.ionos.com))
 1) Create a S3 Key Management: access the `Storage\Object Storage\S3 Key Management` option and generate a Key. Keep the key and the secret;
 2) Create the required buckets: access the `Storage\Object Storage\S3 Web Console` option and create two buckets: company1;
-3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `example/file-transfer-pull/device1-data.csv`;
-4) Open the `example/file-transfer-pull/provider/resources/provider-config.properties` file and insert the key and the secret (step 1);
+3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `s3/file-transfer-pull/device1-data.csv`;
+4) Open the `s3/file-transfer-pull/provider/resources/provider-config.properties` file and insert the key and the secret (step 1);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 
@@ -32,11 +32,11 @@ Note: by design, S3 technology allows only unique names for the buckets. You may
 
 Local execution:
 ```bash
-java -Dedc.keystore=example/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=example/file-transfer-pull/consumer/resources/consumer-vault.properties -Dedc.fs.config=example/file-transfer-pull/consumer/resources/consumer-config.properties -jar example/file-transfer-pull/consumer/build/libs/dataspace-connector.jar
+java -Dedc.keystore=s3/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=s3/file-transfer-pull/consumer/resources/consumer-vault.properties -Dedc.fs.config=s3/file-transfer-pull/consumer/resources/consumer-config.properties -jar s3/file-transfer-pull/consumer/build/libs/dataspace-connector.jar
 
-java -Dedc.keystore=example/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=example/file-transfer-pull/provider/resources/provider-vault.properties -Dedc.fs.config=example/file-transfer-pull/provider/resources/provider-config.properties -jar example/file-transfer-pull/provider/build/libs/dataspace-connector.jar
+java -Dedc.keystore=s3/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=s3/file-transfer-pull/provider/resources/provider-vault.properties -Dedc.fs.config=s3/file-transfer-pull/provider/resources/provider-config.properties -jar s3/file-transfer-pull/provider/build/libs/dataspace-connector.jar
 
-java -jar ./example/file-transfer-pull/backend-service/build/libs/http-pull-connector.jar
+java -jar ./s3/file-transfer-pull/backend-service/build/libs/http-pull-connector.jar
 ```
 
 or

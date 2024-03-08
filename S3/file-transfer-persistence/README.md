@@ -24,11 +24,11 @@ In order to configure this sample, please follow this steps:
 (We will use the [DCD](https://dcd.ionos.com))
 1) Create a S3 Key Management: access the `Storage\Object Storage\S3 Key Management` option and generate a Key. Keep the key and the secret;
 2) Create the required buckets: access the `Storage\Object Storage\S3 Web Console` option and create two buckets: company1 and company2;
-3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `example/file-transfer-persistence/device1-data.csv`;
+3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `s3/file-transfer-persistence/device1-data.csv`;
 4) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
 5) Copy the required configuration fields:  
-Consumer: open the `example/file-transfer-persistence/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;
-Provider: open the `example/file-transfer-persistence/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
+Consumer: open the `s3/file-transfer-persistence/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;
+Provider: open the `s3/file-transfer-persistence/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 

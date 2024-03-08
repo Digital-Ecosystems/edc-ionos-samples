@@ -67,9 +67,9 @@ Note:
 
 Local execution:
 ```bash
-java -Dedc.fs.config=example/file-transfer-multicloud/consumer/resources/consumer-config.properties -jar example/file-transfer-multicloud/consumer/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=s3/file-transfer-multicloud/consumer/resources/consumer-config.properties -jar s3/file-transfer-multicloud/consumer/build/libs/dataspace-connector.jar
 
-java -Dedc.fs.config=example/file-transfer-multicloud/provider/resources/provider-config.properties -jar example/file-transfer-multicloud/provider/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=s3/file-transfer-multicloud/provider/resources/provider-config.properties -jar s3/file-transfer-multicloud/provider/build/libs/dataspace-connector.jar
 ```
 
 or
