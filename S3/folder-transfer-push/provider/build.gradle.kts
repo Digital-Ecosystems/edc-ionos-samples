@@ -25,51 +25,60 @@ repositories {
     maven {// while runtime-metamodel dependency is still a snapshot
 		url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
     }
-	maven {
-		url = uri("https://maven.pkg.github.com/Digital-Ecosystems/edc-ionos-s3/")
-		credentials {
-			username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME_GITHUB")
-			password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN_GITHUB")
-		}
-	}
+    maven {
+        url = uri("https://maven.pkg.github.com/Digital-Ecosystems/edc-ionos-s3/")
+        credentials {
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME_GITHUB")
+            password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN_GITHUB")
+        }
+    }
+
+	
+	  gradlePluginPortal()
 }
 val javaVersion: String by project
+val faaastVersion: String by project
 val edcGroup: String by project
 val edcVersion: String by project
 val ionosGroup: String by project
 val ionosVersion: String by project
+
 val okHttpVersion: String by project
 val rsApi: String by project
 val metaModelVersion: String by project
 
-
 dependencies {
 
 	implementation("${edcGroup}:control-plane-core:${edcVersion}")
-	implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
+    implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
 
-	implementation("${edcGroup}:api-observability:${edcVersion}")
+    implementation("${edcGroup}:api-observability:${edcVersion}")
 	
 	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
 
 	implementation("${edcGroup}:http:${edcVersion}")
-	
-	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")
-	
-	implementation("${edcGroup}:management-api:${edcVersion}")
-	
+
+	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")	
+
+    implementation("${edcGroup}:management-api:${edcVersion}")
+		
 	implementation("${edcGroup}:vault-hashicorp:${edcVersion}")
 
-	implementation("${ionosGroup}:provision-ionos-s3:${ionosVersion}")
+
+		
+	implementation("${edcGroup}:iam-mock:${edcVersion}")
 	
-	implementation("${edcGroup}:data-plane-client:${edcVersion}")
+
+	implementation("${edcGroup}:dsp:${edcVersion}")
+	//file-transfer
+	implementation("${edcGroup}:control-plane-core:${edcVersion}")
+	implementation("${edcGroup}:data-plane-core:${edcVersion}")
+    implementation("${ionosGroup}:data-plane-ionos-s3:${ionosVersion}")
+    implementation("${edcGroup}:data-plane-client:${edcVersion}")
     implementation("${edcGroup}:data-plane-selector-client:${edcVersion}")
     implementation("${edcGroup}:data-plane-selector-core:${edcVersion}")
+    implementation("${edcGroup}:transfer-data-plane:${edcVersion}")
 
-	implementation("${edcGroup}:iam-mock:${edcVersion}")
-
-	//new
-	implementation("${edcGroup}:dsp:${edcVersion}")
 }
 
 application {

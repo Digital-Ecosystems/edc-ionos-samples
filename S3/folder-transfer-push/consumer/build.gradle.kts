@@ -38,6 +38,7 @@ val edcGroup: String by project
 val edcVersion: String by project
 val ionosGroup: String by project
 val ionosVersion: String by project
+
 val okHttpVersion: String by project
 val rsApi: String by project
 val metaModelVersion: String by project
@@ -49,27 +50,28 @@ dependencies {
 	implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
 
 	implementation("${edcGroup}:api-observability:${edcVersion}")
-	
+	implementation("${edcGroup}:data-plane-client:${edcVersion}")
+    implementation("${edcGroup}:data-plane-selector-client:${edcVersion}")
+    implementation("${edcGroup}:data-plane-selector-core:${edcVersion}")
+	implementation("${edcGroup}:data-plane-selector-api:${edcVersion}")
 	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
 
 	implementation("${edcGroup}:http:${edcVersion}")
 	
-	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")
+	implementation("${edcGroup}:dsp:${edcVersion}")
 	
+	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")	
+
 	implementation("${edcGroup}:management-api:${edcVersion}")
 	
 	implementation("${edcGroup}:vault-hashicorp:${edcVersion}")
-
-	implementation("${ionosGroup}:provision-ionos-s3:${ionosVersion}")
 	
-	implementation("${edcGroup}:data-plane-client:${edcVersion}")
-    implementation("${edcGroup}:data-plane-selector-client:${edcVersion}")
-    implementation("${edcGroup}:data-plane-selector-core:${edcVersion}")
-
+	implementation("${ionosGroup}:provision-ionos-s3:${ionosVersion}")
+			
 	implementation("${edcGroup}:iam-mock:${edcVersion}")
+	
+	
 
-	//new
-	implementation("${edcGroup}:dsp:${edcVersion}")
 }
 
 application {
