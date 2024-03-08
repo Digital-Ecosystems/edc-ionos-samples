@@ -52,7 +52,6 @@ Note:
 - the Hashicorp vault will have the required data for the both connectors;
 - the `edc.vault.hashicorp.url` is the address of the Hashicorp Vault;
 - the `edc.vault.hashicorp.token` is the root token of the Hashicorp Vault;
-- 
 
 ## Usage
 
