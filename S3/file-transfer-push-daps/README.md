@@ -237,12 +237,11 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
 				"dataDestination": { 
 					"type": "IonosS3",
 					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "'$TF_VAR_consumer_bucketname'",
-					"keyName" : "device1-data.csv"
+				    "bucketName": "'$TF_VAR_consumer_bucketname'",
+					"path": "folder2/",
+					"keyName" : "mykey"
 				
-				
-				},
-				"managedResources": false
+				}
         }'  | jq -r '.["@id"]')
     ```
 

@@ -89,22 +89,20 @@ curl -d '{
 			"@context": {
              "edc": "https://w3id.org/edc/v0.0.1/ns/"
            },
-           "asset": {
-             "@id": "assetId",
-			 "properties": {
+            "@id": "assetId",
+			"properties": {
               
                "name": "product description",
                "contenttype": "application/json"
-             }
-           },
+            },
            "dataAddress": {
-             "properties": {
+            
 			 "type": "AzureStorage",
 				"account": "edcionosstorage",
 				"container": "src-container",
 				"blobname": "device1-data.csv",
 				"keyName" : "<storage-account-name>-key1"
-            }
+            
            }
          }'  -H 'X-API-Key: password' \
 		 -H 'content-type: application/json' http://localhost:8182/management/v2/assets
@@ -135,7 +133,7 @@ curl -d '{
            "@context": {
              "edc": "https://w3id.org/edc/v0.0.1/ns/"
            },
-           "@id": "1",
+           "@id": "assetId",
            "accessPolicyId": "aPolicy",
            "contractPolicyId": "aPolicy",
            "assetsSelector": []
@@ -195,7 +193,7 @@ curl --location --request POST 'http://localhost:9192/management/v2/contractnego
   "protocol": "dataspace-protocol-http",
   "offer": {
     "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-    "assetId": "1",
+    "assetId": "assetId",
     "policy": {"@id":<"REPLACE WHERE">,
 			"@type": "odrl:Set",
 			"odrl:permission": {
@@ -206,7 +204,7 @@ curl --location --request POST 'http://localhost:9192/management/v2/contractnego
 			},
 			"odrl:prohibition": [],
 			"odrl:obligation": [],
-			"odrl:target": "1"}
+			"odrl:target": "assetId"}
   }
 }'
 ```
@@ -266,11 +264,11 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
 					"type": "IonosS3",
 					"storage":"s3-eu-central-1.ionoscloud.com",
 					"bucketName": "company2",
-					"keyName" : "device1-data.csv"
+					"path": "folder2/",
+					"keyName" : "mykey"
 				
 				
-				},
-				"managedResources": false
+				}
         }'
 ```
 Note: copy the `id` field to do the deprovisioning;

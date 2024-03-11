@@ -49,16 +49,15 @@ curl --header 'X-API-Key: password' \
 			"@context": {
              "edc": "https://w3id.org/edc/v0.0.1/ns/"
            },
-           "asset": {
+           
              "@id": "assetId",
 			 "properties": {
               
                "name": "product description",
                "contenttype": "application/json"
-             }
-           },
+             },
            "dataAddress": {
-             "properties": {
+             
               "type": "AzureStorage",
               "bucketName": "'$PROVIDER_BUCKET'",
               "container": "'$PROVIDER_BUCKET'",
@@ -66,7 +65,7 @@ curl --header 'X-API-Key: password' \
               "storage": "s3-eu-central-1.ionoscloud.com",
               "keyName": "device1-data.csv",
               "type": "IonosS3"
-             }
+             
            }
          }' -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/assets \
          -s | jq
@@ -137,18 +136,18 @@ EOF
       "protocol": "dataspace-protocol-http",
       "offer": {
         "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-        "assetId": "1",
+        "assetId": "assetId",
         "policy": {"@id":"$OFFER_POLICY",
           "@type": "odrl:Set",
           "odrl:permission": {
-            "odrl:target": "1",
+            "odrl:target": "assetId",
             "odrl:action": {
               "odrl:type": "USE"
             }
           },
           "odrl:prohibition": [],
           "odrl:obligation": [],
-          "odrl:target": "1"}
+          "odrl:target": "assetId"}
       }
     }' -s | jq -r '.["@id"]')
 ```
@@ -186,11 +185,11 @@ curl -X POST "http://$CONSUMER_IP:8182/management/v2/transferprocesses" \
         "dataDestination": { 
 					"type": "IonosS3",
 					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "$CONSUMER_BUCKET",
-					"keyName" : "device1-data.csv"
+					"bucketName": "company2",
+					"path": "folder2/",
+					"keyName" : "mykey"
 				
-				},
-				"managedResources": false
+				}
     }
 EOF
 ```

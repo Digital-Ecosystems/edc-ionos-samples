@@ -220,9 +220,9 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
 					"type": "IonosS3",
 					"storage":"s3-eu-central-1.ionoscloud.com",
 					"bucketName": "company2",
-					"keyName" : "device1-data.csv"
-				},
-				"managedResources": false
+					"path": "folder2/",
+					"keyName" : "mykey"
+				}
         }'
 ```
 You will have an answer like the following:
