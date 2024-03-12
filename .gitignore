@@ -1,2 +1,6 @@
 /S3/folder-transfer-push/provider/build/
 /S3/folder-transfer-push/consumer/build/
+/gradle/*
+/gradlew
+/gradlew.bat
+/.idea/gradle.xml

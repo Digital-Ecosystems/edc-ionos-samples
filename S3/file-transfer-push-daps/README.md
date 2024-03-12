@@ -229,11 +229,11 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
                    "edc": "https://w3id.org/edc/v0.0.1/ns/"
                    },
                "@type": "TransferRequestDto",
-                "connectorId": "consumer",
-                "connectorAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
+               "connectorId": "consumer",
+               "connectorAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
                "protocol": "dataspace-protocol-http",
-                "contractId": "'$CONTRACT_AGREEMENT_ID'",
-                "assetId": "1",
+               "contractId": "'$CONTRACT_AGREEMENT_ID'",
+               "assetId": "1",
                "dataDestination": { 
                    "type": "IonosS3",
                    "storage":"s3-eu-central-1.ionoscloud.com",
