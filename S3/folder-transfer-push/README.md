@@ -57,9 +57,9 @@ Note:
 
 Local execution:
 ```bash
-java -Dedc.fs.config=s3/file-transfer-multicloud/consumer/resources/consumer-config.properties -jar s3/file-transfer-multicloud/consumer/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=s3/folder-transfer-push/consumer/resources/consumer-config.properties -jar s3/folder-transfer-push/consumer/build/libs/dataspace-connector.jar
 
-java -Dedc.fs.config=s3/file-transfer-multicloud/provider/resources/provider-config.properties -jar s3/file-transfer-multicloud/provider/build/libs/dataspace-connector.jar
+java -Dedc.fs.config=s3/folder-transfer-push/provider/resources/provider-config.properties -jar s3/folder-transfer-push/provider/build/libs/dataspace-connector.jar
 ```
 
 or
