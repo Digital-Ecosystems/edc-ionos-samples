@@ -1,0 +1,18 @@
+{
+   "@context":{
+      "edc":"https://w3id.org/edc/v0.0.1/ns/",
+      "odrl":"http://www.w3.org/ns/odrl/2/"
+   },
+   "@id":"policy-1",
+   "policy": {
+     "@type": "odrl:use",
+     "odrl:prohibition": [],
+     "extensibleProperties": {
+       "shareWith":"user2",
+       "shareType": "0",
+       "permissionType":"1",
+       "expirationTime":"1",
+       "downloadable":"false"
+     }
+   }
+}

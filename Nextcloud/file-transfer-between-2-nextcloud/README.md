@@ -1,15 +1,13 @@
-#File transfer between two different clouds
+# File transfer between two different clouds
 
-This example shows how to exchange a data file between two EDC's using two different Nextcloud's: Nextcloud.
+This example shows how to `transfer` a file between two EDC's using two instances of Nextcloud.
 
-The consumer will use the Nextcloud and the provider will use Nextcloud.
-
-It is based on [this](https://github.com/eclipse-edc/Samples/blob/main/transfer/transfer-05-file-transfer-cloud/README.md) EDC example and it will execute the connector locally.
+It is based on EDC example and it will execute the connector locally.
 
 ## Requirements
 
 You will need the following:
-- Nextcloud account;
+- Nextcloud account from IONOS or run it locally;
 - Java Development Kit (JDK) 17 or higher;
 - Docker;
 - GIT;
@@ -18,10 +16,18 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the previous [readme](../../README.md).
+Just check the `Building and Running` section of the [official Ionos Nextcloud extension repository](https://github.com/ionos-cloud/edc-ionos-nextcloud?tab=readme-ov-file#building-and-running).
 
 ### Configuration
-In order to configure this example, please follow this steps:
+
+In order to run this sample, you need to edit the `config.properties` file with the following parameters:
+
+| Parameter name                     | Description| Mandatory      |
+|------------------------------------|--------------|----------------|
+| `edc.ionos.nextcloud.username`     | Nexcloud Username       | Yes     |
+| `edc.ionos.nextcloud.password`     | Nexcloud Password       | Yes     |
+| `edc.ionos.nextcloud.endpoint`     | Nexcloud endpoint address (the URL of Nextcloud) | Yes   |
+
 
 ## Usage
 
@@ -33,7 +39,7 @@ java -Dedc.fs.config=./consumer/resources/config.properties -jar ./consumer/buil
 java -Dedc.fs.config=./provider/resources/config.properties -jar ./provider/build/libs/connector.jar
 ```
 
-We will have to call some URL's in order to transfer the file:
+We will have to call some URL's in order to share the file. The payload of some curl commands is kept in some Json files inside the `jsons`folder.
 
 1) Asset creation for the consumer
 ```console
@@ -69,19 +75,7 @@ You will have an answer like the following:
 		"@id": "Y29udHJhY3QtMQ==:YXNzZXQtMQ==:MzIxMGUwNTQtYzYxYy00N2VhLTg4MmMtYTc0NTJmNDYxM2Fi",
 		"@type": "odrl:Set",
 		"odrl:permission": [],
-		"odrl:prohibition": {
-			"odrl:target": "asset-1",
-			"odrl:action": {
-				"odrl:type": "USE"
-			},
-			"odrl:constraint": {
-				"odrl:leftOperand": "downloadable",
-				"odrl:operator": {
-					"@id": "odrl:eq"
-				},
-				"odrl:rightOperand": "true"
-			}
-		},
+		"odrl:prohibition": [],
 		"odrl:obligation": [],
 		"odrl:target": {
 			"@id": "asset-1"
@@ -101,7 +95,7 @@ You will have an answer like the following:
 ```
 
 5) Contract negotiation
-   Copy the `policy{ @id` from the response of the first curl into this curl and execute it.
+   Copy the `"odrl:hasPolicy:{ @id` from the response of the first curl into this curl and execute it.
 
 ```
 curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
@@ -153,10 +147,6 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
 	--header 'X-API-Key: password' \
     -d @jsons/transfer.json
 ```
-Note: copy the `id` field to do the deprovisioning;
 
-8) Deprovisioning
+Go to the Nextcloud associated with the consumer and check if the file was well transferred.
 
-```
-curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v2/transferprocesses/{<ID>}/deprovision"
-```

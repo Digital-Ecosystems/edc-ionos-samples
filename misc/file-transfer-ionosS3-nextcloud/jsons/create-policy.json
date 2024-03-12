@@ -5,24 +5,10 @@
    },
    "@id":"policy-1",
    "policy": {
-    "@type": "odrl:use",
-    "odrl:prohibition":[
-        {
-            "odrl:target": "asset-1",
-             "odrl:action": {
-                    "odrl:type": "USE"
-                },
-                "odrl:edctype": "dataspaceconnector:prohibition",
-        "odrl:constraint": [{
-            "odrl:leftOperand": "downloadable",
-            "odrl:operator": { 
-                 "@id": "odrl:eq"              
-                },
-            "odrl:rightOperand": "true",
-            "odrl:comment": "if is downloadable "
-          }
-        ]
-        }
-        ]
-  }
+      "@type": "odrl:use",
+      "odrl:prohibition": [],
+      "extensibleProperties": {
+        "downloadable": "true"
+      }
+   }
 }

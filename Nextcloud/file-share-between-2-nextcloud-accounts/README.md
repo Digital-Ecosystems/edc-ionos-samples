@@ -1,19 +1,18 @@
-# File transfer between IONOS S3 storage and Nextcloud storage
+# File Share between two different nextcloud accounts
 
-This example shows how to transfer a file between two EDC's using Nextcloud and IONOS S3 storage. The file will be inititally read from the `IONOS S3 Storage` and stored on the `Nextcloud Storage`.
+This example shows how to `share` a data file between two EDC's using one instance of Nextcloud and two different accounts.
 
-The consumer Connector will use the Nextcloud and the provider Connector will use IonosS3.
-
-It is based on [this](https://github.com/eclipse-edc/Samples/blob/main/transfer/transfer-05-file-transfer-cloud/README.md) EDC example and it will execute the connector locally.
+It is based on EDC example, and it will execute the connector locally.
 
 ## Requirements
 
 You will need the following:
-- Nextcloud account or run it locally;
+- Nextcloud account from IONOS or run it locally;
 - Java Development Kit (JDK) 17 or higher;
 - Docker;
 - GIT;
 - Linux shell or PowerShell;
+
 
 ### Building the project
 
@@ -21,25 +20,13 @@ Just check the `Building and Running` section of the [official Ionos Nextcloud e
 
 ### Configuration
 
-In order to run this sample, you need to edit the `config.properties` file of the consumer and the provider.
-
-`Consumer`
+In order to run this sample, you need to edit the `config.properties` file with the following parameters:
 
 | Parameter name                     | Description| Mandatory      |
 |------------------------------------|--------------|----------------|
 | `edc.ionos.nextcloud.username`     | Nexcloud Username       | Yes     |
 | `edc.ionos.nextcloud.password`     | Nexcloud Password       | Yes     |
 | `edc.ionos.nextcloud.endpoint`     | Nexcloud endpoint address (the URL of Nextcloud) | Yes   |
-
-
-`Provider`
-(We will use the [DCD](https://dcd.ionos.com))
-1) Create a S3 Key Management: access the `Storage\Object Storage\S3 Key Management` option and generate a Key. Keep the key and the secret;
-2) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
-3) Copy the token to the the config file (or use an Hashicorp Vault instance) to the field `edc.ionos.token`;   
-4) Copy the S3 Key from the step 1 to the config file (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key`;
-
-Note: check the repo of the [EDC IONOS S3 Extension](https://github.com/ionos-cloud/edc-ionos-s3) to know more.
 
 
 ## Usage
@@ -88,19 +75,7 @@ You will have an answer like the following:
 		"@id": "Y29udHJhY3QtMQ==:YXNzZXQtMQ==:MzIxMGUwNTQtYzYxYy00N2VhLTg4MmMtYTc0NTJmNDYxM2Fi",
 		"@type": "odrl:Set",
 		"odrl:permission": [],
-		"odrl:prohibition": {
-			"odrl:target": "asset-1",
-			"odrl:action": {
-				"odrl:type": "USE"
-			},
-			"odrl:constraint": {
-				"odrl:leftOperand": "downloadable",
-				"odrl:operator": {
-					"@id": "odrl:eq"
-				},
-				"odrl:rightOperand": "true"
-			}
-		},
+		"odrl:prohibition": [],
 		"odrl:obligation": [],
 		"odrl:target": {
 			"@id": "asset-1"
@@ -120,7 +95,7 @@ You will have an answer like the following:
 ```
 
 5) Contract negotiation
-   Copy the `policy{ @id` from the response of the first curl into this curl and execute it.
+   Copy the `"odrl:hasPolicy:{ @id` from the response of the first curl into this curl and execute it.
 
 ```
 curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
@@ -173,12 +148,4 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     -d @jsons/transfer.json
 ```
 
-Access the Nextcloud instance and check if the file was transfered.
-
-Note: copy the `id` field to do the deprovisioning;
-
-8) Deprovisioning
-
-```
-curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v2/transferprocesses/{<ID>}/deprovision"
-```
+Using your browser, access the nextcloud instance, enter with the credentials of the user that you have defined on the configuration stage (config.properties or the vault) and you will see that the file was shared.

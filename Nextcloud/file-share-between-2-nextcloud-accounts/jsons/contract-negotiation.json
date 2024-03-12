@@ -7,14 +7,15 @@
    "counterPartyAddress":"http://localhost:8282/protocol",
    "providerId":"consumer",
    "protocol":"dataspace-protocol-http",
-    "policy":{
-      "@id":"{{offerId}}",
-      "@type": "odrl:Set",
-      "odrl:permission": [],
-      "odrl:prohibition": [],
-      "odrl:obligation": [],
-      "odrl:target": {
-        "@id": "asset-1"
+   "policy":{
+        "@id":"{{offerId}}",
+        "@type": "odrl:Set",
+        "odrl:permission": [],
+       "odrl:prohibition": [],
+        "odrl:obligation": [],
+        "odrl:target": {
+            "@id": "asset-1"
+        }
+         
       }
-  }
 }
