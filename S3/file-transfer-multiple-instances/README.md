@@ -46,38 +46,36 @@ curl http://$CONSUMER_IP:8181/api/check/health
 ```console
 curl --header 'X-API-Key: password' \
 -d '{
-			"@context": {
-             "edc": "https://w3id.org/edc/v0.0.1/ns/"
-           },
-           
-             "@id": "assetId",
-			 "properties": {
-              
-               "name": "product description",
-               "contenttype": "application/json"
-             },
-           "dataAddress": {
-             
-              "type": "AzureStorage",
-              "bucketName": "'$PROVIDER_BUCKET'",
-              "container": "'$PROVIDER_BUCKET'",
-              "blobName": "device1-data.csv",
-              "storage": "s3-eu-central-1.ionoscloud.com",
-              "keyName": "device1-data.csv",
-              "type": "IonosS3"
-             
-           }
-         }' -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/assets \
+       "@context": {
+         "edc": "https://w3id.org/edc/v0.0.1/ns/"
+       },
+        "@id": "assetId",
+        "properties": {
+          "name": "product description",
+          "contenttype": "application/json"
+        },
+       "dataAddress": {
+         
+          "type": "AzureStorage",
+          "bucketName": "'$PROVIDER_BUCKET'",
+          "container": "'$PROVIDER_BUCKET'",
+          "blobName": "device1-data.csv",
+          "storage": "s3-eu-central-1.ionoscloud.com",
+          "keyName": "device1-data.csv",
+          "type": "IonosS3"
+         
+       }
+     }' -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/assets \
          -s | jq
 ```
 
 2) Policy creation
 ```console
 curl -d '{
-			"@context": {
-				"edc": "https://w3id.org/edc/v0.0.1/ns/",
-				"odrl": "http://www.w3.org/ns/odrl/2/"
-			},
+           "@context": {
+                "edc": "https://w3id.org/edc/v0.0.1/ns/",
+                "odrl": "http://www.w3.org/ns/odrl/2/"
+           },
            "@id": "aPolicy",
            "policy": {
              "@type": "set",
@@ -86,7 +84,7 @@ curl -d '{
              "odrl:obligation": []
            }
          }' -H 'X-API-Key: password' \
-		 -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/policydefinitions
+        -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/policydefinitions
 ```
 
 3) Contract creation
@@ -100,7 +98,7 @@ curl -d '{
            "contractPolicyId": "aPolicy",
            "assetsSelector": []
          }' -H 'X-API-Key: password' \
- -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/contractdefinitions
+        -H 'content-type: application/json' http://$PROVIDER_IP:8182/management/v2/contractdefinitions
 ```
 
 4) Fetching the catalog
@@ -159,7 +157,7 @@ echo $ID
 6) Contract agreement
 ```console
 CONTRACT_AGREEMENT_ID=$(curl -X GET "http://$CONSUMER_IP:8182/api/v1/data/contractnegotiations/$ID" \
-	--header 'X-API-Key: password' \
+    --header 'X-API-Key: password' \
     --header 'Content-Type: application/json' \
     -s | jq -r '.["edc:contractAgreementId"]')
 echo $CONTRACT_AGREEMENT_ID
@@ -169,27 +167,27 @@ echo $CONTRACT_AGREEMENT_ID
 ```console
 curl -X POST "http://$CONSUMER_IP:8182/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
-	  --header 'X-API-Key: password' \
+    --header 'X-API-Key: password' \
     -d @- <<-EOF
     {	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
-                "connectorId": "consumer",
-                "connectorAddress": "http://$PROVIDER_IP:8282/protocol",
-				"protocol": "dataspace-protocol-http",
+        "@context": {
+            "edc": "https://w3id.org/edc/v0.0.1/ns/"
+            },
+        "@type": "TransferRequestDto",
+        "connectorId": "consumer",
+        "connectorAddress": "http://$PROVIDER_IP:8282/protocol",
+        "protocol": "dataspace-protocol-http",
         "contractId": "$CONTRACT_AGREEMENT_ID",
         "protocol": "ids-multipart",
         "assetId": "assetId",
         "dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "company2",
-					"path": "folder2/",
-					"keyName" : "mykey"
-				
-				}
+            "type": "IonosS3",
+            "storage":"s3-eu-central-1.ionoscloud.com",
+            "bucketName": "company2",
+            "path": "folder2/",
+            "keyName" : "mykey"
+        
+        }
     }
 EOF
 ```

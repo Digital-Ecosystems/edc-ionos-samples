@@ -223,25 +223,25 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
     ```bash
     export TRANSFER_PROCESSS_ID=$(curl -X POST "http://$CONSUMER_ADDRESS:8182/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
-	--header 'X-API-Key: password' \
+    --header 'X-API-Key: password' \
     --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
+               "@context": {
+                   "edc": "https://w3id.org/edc/v0.0.1/ns/"
+                   },
+               "@type": "TransferRequestDto",
                 "connectorId": "consumer",
                 "connectorAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
-				"protocol": "dataspace-protocol-http",
+               "protocol": "dataspace-protocol-http",
                 "contractId": "'$CONTRACT_AGREEMENT_ID'",
                 "assetId": "1",
-				"dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-				    "bucketName": "'$TF_VAR_consumer_bucketname'",
-					"path": "folder2/",
-					"keyName" : "mykey"
-				
-				}
+               "dataDestination": { 
+                   "type": "IonosS3",
+                   "storage":"s3-eu-central-1.ionoscloud.com",
+                   "bucketName": "'$TF_VAR_consumer_bucketname'",
+                   "path": "folder2/",
+                   "keyName" : "mykey"
+               
+               }
         }'  | jq -r '.["@id"]')
     ```
 

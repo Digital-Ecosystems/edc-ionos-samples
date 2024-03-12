@@ -104,29 +104,29 @@ curl --location --request POST 'http://localhost:9192/management/v2/contractnego
 --header 'X-API-Key: password' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-	"@context": {
-    "edc": "https://w3id.org/edc/v0.0.1/ns/",
-    "odrl": "http://www.w3.org/ns/odrl/2/"
-  },
-  "@type": "NegotiationInitiateRequestDto",
-  "connectorId": "provider",
-  "connectorAddress": "http://provider:8282/protocol",
-  "protocol": "dataspace-protocol-http",
-  "offer": {
-    "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-    "assetId": "1",
-    "policy": {"@id":<"REPLACE HERE">,
-			"@type": "odrl:Set",
-			"odrl:permission": {
-				"odrl:target": "1",
-				"odrl:action": {
-					"odrl:type": "USE"
-				}
-			},
-			"odrl:prohibition": [],
-			"odrl:obligation": [],
-			"odrl:target": "1"}
-  }
+            "@context": {
+               "edc": "https://w3id.org/edc/v0.0.1/ns/",
+               "odrl": "http://www.w3.org/ns/odrl/2/"
+             },
+             "@type": "NegotiationInitiateRequestDto",
+             "connectorId": "provider",
+             "connectorAddress": "http://provider:8282/protocol",
+             "protocol": "dataspace-protocol-http",
+             "offer": {
+               "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
+               "assetId": "1",
+               "policy": {"@id":<"REPLACE HERE">,
+                        "@type": "odrl:Set",
+                        "odrl:permission": {
+                            "odrl:target": "1",
+                            "odrl:action": {
+                                "odrl:type": "USE"
+                            }
+                        },
+                        "odrl:prohibition": [],
+                        "odrl:obligation": [],
+                        "odrl:target": "1"}
+             }
 }'
 ```
 
@@ -207,22 +207,22 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
 	--header 'X-API-Key: password' \
     --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
-                "connectorId": "consumer",
-                "connectorAddress": "http://provider:8282/protocol",
-				"protocol": "dataspace-protocol-http",
-                "contractId": "<CONTRACT AGREEMENT ID>",
-                "assetId": "1",
-				"dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "company2",
-					"path": "folder2/",
-					"keyName" : "mykey"
-				}
+            "@context": {
+                "edc": "https://w3id.org/edc/v0.0.1/ns/"
+            },
+            "@type": "TransferRequestDto",
+            "connectorId": "consumer",
+            "connectorAddress": "http://provider:8282/protocol",
+            "protocol": "dataspace-protocol-http",
+            "contractId": "<CONTRACT AGREEMENT ID>",
+            "assetId": "1",
+            "dataDestination": { 
+                "type": "IonosS3",
+                "storage":"s3-eu-central-1.ionoscloud.com",
+                "bucketName": "company2",
+                "path": "folder2/",
+                "keyName" : "mykey"
+            }
         }'
 ```
 You will have an answer like the following:

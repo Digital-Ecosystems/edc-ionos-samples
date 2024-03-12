@@ -1,4 +1,4 @@
-# File transfer between two different clouds
+# Folder transfer between two different clouds
 
  This example shows how to exchange a data folders between two Ionos EDC's 
 
@@ -75,45 +75,45 @@ We will have to call some URL's in order to transfer the file:
 1) Asset creation for the consumer
 ```console
 curl -d '{
-			"@context": {
-              "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
-           },
-     
-            "@id": "assetId",
-			"properties": {
-              
-               "name": "product description",
-               "contenttype": "application/json"
-            },
-           "dataAddress": {
-			    "type": "IonosS3",
-				"storage": "s3-eu-central-1.ionoscloud.com",
-				"bucketName": "mybucket",
-				"blobname": "folder1/",
-				"filterIncludes": "device1-data.csv",
-				"filterExcludes": "device2-data.csv",
-				"keyName" : "mykey"
-            
-           }
+          "@context": {
+                    "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+                 },
+           
+                  "@id": "assetId",
+                  "properties": {
+                    
+                     "name": "product description",
+                     "contenttype": "application/json"
+                  },
+                 "dataAddress": {
+                      "type": "IonosS3",
+                      "storage": "s3-eu-central-1.ionoscloud.com",
+                      "bucketName": "mybucket",
+                      "blobname": "folder1/",
+                      "filterIncludes": "device1-data.csv",
+                      "filterExcludes": "device2-data.csv",
+                      "keyName" : "mykey"
+                  
+                 }
          }'  -H 'X-API-Key: password' \
-		 -H 'content-type: application/json' http://localhost:8182/management/v3/assets
+	-H 'content-type: application/json' http://localhost:8182/management/v3/assets
 ```
 Note: for more details about dataAddress fields, please take a look at the [documentation](url)
 
 2) Policy creation
 ```console
 curl -d '{
-			"@context": {
-				"edc": "https://w3id.org/edc/v0.0.1/ns/",
-				"odrl": "http://www.w3.org/ns/odrl/2/"
-			},
-           "@id": "aPolicy",
-           "policy": {
-             "@type": "set",
-             "odrl:permission": [],
-             "odrl:prohibition": [],
-             "odrl:obligation": []
-           }
+            "@context": {
+               "edc": "https://w3id.org/edc/v0.0.1/ns/",
+               "odrl": "http://www.w3.org/ns/odrl/2/"
+             },
+             "@id": "aPolicy",
+             "policy": {
+                 "@type": "set",
+                 "odrl:permission": [],
+                 "odrl:prohibition": [],
+                 "odrl:obligation": []
+                   }
          }' -H 'X-API-Key: password' \
 		 -H 'content-type: application/json' http://localhost:8182/management/v2/policydefinitions
 ```
@@ -135,15 +135,15 @@ curl -d '{
 4) Fetching the catalog
 ```console
 curl -X POST "http://localhost:9192/management/v2/catalog/request" \
---header 'X-API-Key: password' \
---header 'Content-Type: application/json' \
--d '{
-      "@context": {
-        "edc": "https://w3id.org/edc/v0.0.1/ns/"
-      },
-      "providerUrl": "http://localhost:8282/protocol",
-      "protocol": "dataspace-protocol-http"
-    }'
+            --header 'X-API-Key: password' \
+            --header 'Content-Type: application/json' \
+            -d '{
+                  "@context": {
+                    "edc": "https://w3id.org/edc/v0.0.1/ns/"
+                  },
+                  "providerUrl": "http://localhost:8282/protocol",
+                  "protocol": "dataspace-protocol-http"
+                }'
 ```
 You will have an answer like the following:
 ```
@@ -170,33 +170,34 @@ You will have an answer like the following:
 Copy the `policy{ @id` from the response of the first curl into this curl and execute it.
 
 ```
-curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
---header 'X-API-Key: password' \
---header 'Content-Type: application/json' \
---data-raw '{
-	"@context": {
-    "edc": "https://w3id.org/edc/v0.0.1/ns/",
-    "odrl": "http://www.w3.org/ns/odrl/2/"
-  },
-  "@type": "NegotiationInitiateRequestDto",
-  "consumerId":"consumer",
-  "providerId":"provider",
-  "connectorAddress": "http://localhost:8282/protocol",
-  "protocol": "dataspace-protocol-http",
-  "offer": {
-    "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-    "assetId": "assetId",
-    "policy": {
-            "@id":<"REPLACE WHERE">,
-			 "@type": "odrl:Set",
-      "odrl:permission": [],
-      "odrl:prohibition": [],
-      "odrl:obligation": [],
-      "odrl:target": {
-         "@id": "assetId"
-      }
-  }
-}'
+curl  --location 
+      --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
+      --header 'X-API-Key: password' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{
+          "@context": {
+          "edc": "https://w3id.org/edc/v0.0.1/ns/",
+          "odrl": "http://www.w3.org/ns/odrl/2/"
+        },
+        "@type": "NegotiationInitiateRequestDto",
+        "consumerId":"consumer",
+        "providerId":"provider",
+        "connectorAddress": "http://localhost:8282/protocol",
+        "protocol": "dataspace-protocol-http",
+        "offer": {
+          "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
+          "assetId": "assetId",
+          "policy": {
+                  "@id":<"REPLACE WHERE">,
+                   "@type": "odrl:Set",
+            "odrl:permission": [],
+            "odrl:prohibition": [],
+            "odrl:obligation": [],
+            "odrl:target": {
+               "@id": "assetId"
+            }
+        }
+      }'
 ```
 
 Note: copy the `id` field;
@@ -238,28 +239,28 @@ Note: copy the `contractAgreementId` field;
 Copy the value of the `contractAgreementId` from the response of the previous curl into this curl and execute it.
 ```console
 curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
-    --header "Content-Type: application/json" \
-	--header 'X-API-Key: password' \
-    --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
-                "connectorId": "consumer",
-                "connectorAddress": "http://localhost:8282/protocol",
-				"protocol": "dataspace-protocol-http",
-                "contractId": "<CONTRACT AGREEMENT ID>",
-                "assetId": "assetId",
-				"dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "company2",
-					"path": "folder2/",
-					"keyName" : "mykey"
-				
-				
-				}
-        }'
+      --header "Content-Type: application/json" \
+      --header 'X-API-Key: password' \
+      --data '{	
+           "@context": {
+               "edc": "https://w3id.org/edc/v0.0.1/ns/"
+           },
+           "@type": "TransferRequestDto",
+           "connectorId": "consumer",
+           "connectorAddress": "http://localhost:8282/protocol",
+           "protocol": "dataspace-protocol-http",
+           "contractId": "<CONTRACT AGREEMENT ID>",
+           "assetId": "assetId",
+           "dataDestination": { 
+               "type": "IonosS3",
+               "storage":"s3-eu-central-1.ionoscloud.com",
+               "bucketName": "company2",
+               "path": "folder2/",
+               "keyName" : "mykey"
+           
+           
+                  }
+          }'
 ```
 Note 1: for more details about dataDestination fields, please take a look at the [documentation](url)
 

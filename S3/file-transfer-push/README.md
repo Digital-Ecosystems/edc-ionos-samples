@@ -52,15 +52,15 @@ We will have to call some URL's in order to transfer the file:
 1) Contract offers
 ```console
 curl -X POST "http://localhost:9192/management/v2/catalog/request" \
---header 'X-API-Key: password' \
---header 'Content-Type: application/json' \
--d '{
-      "@context": {
-        "edc": "https://w3id.org/edc/v0.0.1/ns/"
-      },
-      "providerUrl": "http://localhost:8282/protocol",
-      "protocol": "dataspace-protocol-http"
-    }'-s | jq -r
+    --header 'X-API-Key: password' \
+    --header 'Content-Type: application/json' \
+    -d '{
+          "@context": {
+            "edc": "https://w3id.org/edc/v0.0.1/ns/"
+          },
+          "providerUrl": "http://localhost:8282/protocol",
+          "protocol": "dataspace-protocol-http"
+        }'-s | jq -r
 
 ```
 
@@ -112,33 +112,33 @@ Copy the `policy{ @id` from the response of the first curl into this curl and ex
 
 ```
 curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
---header 'X-API-Key: password' \
---header 'Content-Type: application/json' \
---data-raw '{
-	"@context": {
-    "edc": "https://w3id.org/edc/v0.0.1/ns/",
-    "odrl": "http://www.w3.org/ns/odrl/2/"
-  },
-  "@type": "NegotiationInitiateRequestDto",
-  "connectorId": "provider",
-  "connectorAddress": "http://localhost:8282/protocol",
-  "protocol": "dataspace-protocol-http",
-  "offer": {
-    "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-    "assetId": "1",
-    "policy": {"@id":<"REPLACE HERE">,
-			"@type": "odrl:Set",
-			"odrl:permission": {
-				"odrl:target": "1",
-				"odrl:action": {
-					"odrl:type": "USE"
-				}
-			},
-			"odrl:prohibition": [],
-			"odrl:obligation": [],
-			"odrl:target": "1"}
-  }
-}'
+     --header 'X-API-Key: password' \
+     --header 'Content-Type: application/json' \
+     --data-raw '{
+         "@context": {
+         "edc": "https://w3id.org/edc/v0.0.1/ns/",
+         "odrl": "http://www.w3.org/ns/odrl/2/"
+       },
+       "@type": "NegotiationInitiateRequestDto",
+       "connectorId": "provider",
+       "connectorAddress": "http://localhost:8282/protocol",
+       "protocol": "dataspace-protocol-http",
+       "offer": {
+         "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
+         "assetId": "1",
+         "policy": {"@id":<"REPLACE HERE">,
+                 "@type": "odrl:Set",
+                 "odrl:permission": {
+                     "odrl:target": "1",
+                     "odrl:action": {
+                         "odrl:type": "USE"
+                     }
+                 },
+                 "odrl:prohibition": [],
+                 "odrl:obligation": [],
+                 "odrl:target": "1"}
+       }
+     }'
 ```
 
 You will have an answer like the following:
@@ -190,27 +190,27 @@ Copy the value of the `edc:contractAgreementId` from the response of the previou
 ```
 
 curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
-    --header "Content-Type: application/json" \
-	--header 'X-API-Key: password' \
-    --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
+        --header "Content-Type: application/json" \
+        --header 'X-API-Key: password' \
+        --data '{	
+                "@context": {
+                    "edc": "https://w3id.org/edc/v0.0.1/ns/"
+                    },
+                "@type": "TransferRequestDto",
                 "connectorId": "consumer",
                 "connectorAddress": "http://localhost:8282/protocol",
-				"protocol": "dataspace-protocol-http",
+                "protocol": "dataspace-protocol-http",
                 "contractId": "<CONTRACT AGREEMENT ID>",
                 "assetId": "1",
-				"dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "company2",
-					"path": "folder2/",
-					"keyName" : "mykey"
-				
-				
-				}
+                "dataDestination": { 
+                    "type": "IonosS3",
+                    "storage":"s3-eu-central-1.ionoscloud.com",
+                    "bucketName": "company2",
+                    "path": "folder2/",
+                    "keyName" : "mykey"
+                
+                
+                }
         }'
 ```
 You will have an answer like the following:
