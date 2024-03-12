@@ -59,7 +59,7 @@ curl -H 'Content-Type: application/json' \
            "url": "http://localhost:19192/control/transfer",
            "allowedSourceTypes": [  "HttpData", "IonosS3" ],
            "allowedDestTypes": [ "HttpProxy", "HttpData" ],
-            "properties": {
+           "properties": {
              "publicApiUrl": "http://localhost:19291/public/"
            }
          }' \
@@ -213,15 +213,15 @@ curl -d '{
       "providerId": "provider",
       "protocol": "dataspace-protocol-http",
       "offer": {
-       "offerId": "1:assetId:0ed3140c-0927-4ffd-a225-ba92d894eafe",
-       "assetId": "assetId",
-       "policy": {
-         "@id": "@id":"<"REPLACE HERE">",
-         "@type": "Set",
-         "odrl:permission": [],
-         "odrl:prohibition": [],
-         "odrl:obligation": [],
-         "odrl:target": "assetId"
+           "offerId": "1:assetId:0ed3140c-0927-4ffd-a225-ba92d894eafe",
+           "assetId": "assetId",
+           "policy": {
+             "@id": "@id":"<"REPLACE HERE">",
+             "@type": "Set",
+             "odrl:permission": [],
+             "odrl:prohibition": [],
+             "odrl:obligation": [],
+             "odrl:target": "assetId"
        }
       }
 }' -X POST -H 'content-type: application/json' http://localhost:29193/management/v2/contractnegotiations \

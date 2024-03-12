@@ -205,7 +205,7 @@ Copy the value of the `edc:contractAgreementId` from the response of the previou
 
 curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
-	--header 'X-API-Key: password' \
+    --header 'X-API-Key: password' \
     --data '{	
             "@context": {
                 "edc": "https://w3id.org/edc/v0.0.1/ns/"
