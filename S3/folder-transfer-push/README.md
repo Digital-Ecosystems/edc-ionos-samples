@@ -98,7 +98,7 @@ curl -d '{
          }'  -H 'X-API-Key: password' \
 	-H 'content-type: application/json' http://localhost:8182/management/v3/assets
 ```
-Note: for more details about dataAddress fields, please take a look at the [documentation](url)
+Note: for more details about dataAddress fields, please take a look at the [documentation](https://github.com/Digital-Ecosystems/edc-ionos-s3/blob/main/assets.md)
 
 2) Policy creation
 ```console
