@@ -22,7 +22,7 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the previous [readme](../../README.md).
+Just check the `Building and Running` section of the previous [readme](https://github.com/ionos-cloud/edc-ionos-s3).
 
 ### Configuration
 In order to configure this example, please follow this steps:  
@@ -52,8 +52,8 @@ Note:
 - the file `terraform/device1-data.csv` will be put into the `src-container` in the Azure storage; 
 
 `IONOS S3`
-- Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
-- Put the token inside the Hashicorp vault instance (you can run it locally or in the IONOS Cloud). Take a look at this [documentation](../../hashicorp/README.md);
+- Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/blob/main/ionos_token.md);
+- Put the token inside the Hashicorp vault instance (you can run it locally or in the IONOS Cloud). Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/tree/main/hashicorp);
 - Edit the file `consumer/resources`, which is the config properties for the consumer, and put the following fields: 
 ```console
 edc.vault.hashicorp.url=<VAULT_ADDRESS:VAULT_PORT>

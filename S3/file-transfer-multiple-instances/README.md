@@ -4,7 +4,7 @@ This example shows how to do a simple deployment of two EDC's using a Terraform 
 
 ## Deployment
 
-You will create 2 `folders` called `Consumer` and `Provider`, for each of them do the checkout of this repository and follow this [readme](../../deployment/README.md).
+You will create 2 `folders` called `Consumer` and `Provider`, for each of them do the checkout of this repository and follow this [readme](https://github.com/ionos-cloud/edc-ionos-s3/tree/main/deployment/README.md).
 
 **Don't forget to create unique parameters for each connector.**
 

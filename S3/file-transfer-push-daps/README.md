@@ -29,7 +29,7 @@ In order to configure this sample, please follow this steps:
 2) Create a S3 Key Management: access the `Storage/Object Storage/S3 Key Management` option and generate a Key. Keep the key and the secret;
 3) Create the required buckets: access the `Storage/Object Storage/S3 Web Console` option and create two buckets: one for the provider and another for the consumer;
 4) Upload a file named `device1-data.csv` into the provider bucket. You can use the `s3/file-transfer-push-daps/device1-data.csv`;
-5) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
+5) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/blob/main/ionos_token.md);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 

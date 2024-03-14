@@ -28,3 +28,7 @@ Example of a file transfer between 2 connectors with both of them having IONOS S
 ### `file-trasfer-push-daps`
 
 Example of a file transfer between 2 connectors with both of them having IONOS S3 extension and using DAPS and Vault deployed on a Kubernetes cluster.
+
+### `folder-transfer-push`
+
+Example of a folder transfer between 2 connectors with both of them having IONOS S3 extension.

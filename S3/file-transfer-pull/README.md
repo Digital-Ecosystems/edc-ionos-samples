@@ -16,7 +16,7 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the previous [readme](../../README.md).
+Just check the `Building and Running` section of the previous [readme](https://github.com/ionos-cloud/edc-ionos-s3).
 
 ### Configuration
 In order to configure this sample, please follow this steps:
