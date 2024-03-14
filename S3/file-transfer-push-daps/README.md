@@ -28,20 +28,20 @@ In order to configure this sample, please follow this steps:
 1) Create a Kubernetes cluster and deploy DAPS service. Follow the instructions from the [general-des-development](https://github.com/Digital-Ecosystems/general-des-development/tree/main/omejdn-daps).
 2) Create a S3 Key Management: access the `Storage/Object Storage/S3 Key Management` option and generate a Key. Keep the key and the secret;
 3) Create the required buckets: access the `Storage/Object Storage/S3 Web Console` option and create two buckets: one for the provider and another for the consumer;
-4) Upload a file named `device1-data.csv` into the provider bucket. You can use the `example/file-transfer-push-daps/device1-data.csv`;
-5) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
+4) Upload a file named `device1-data.csv` into the provider bucket. You can use the `s3/file-transfer-push-daps/device1-data.csv`;
+5) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/blob/main/ionos_token.md);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 
 ## Usage
 
-Create `example/file-transfer-push-daps/terraform/.env` file from the `example/file-transfer-push-daps/terraform/.env-example` file.
+Create `s3/file-transfer-push-daps/terraform/.env` file from the `s3/file-transfer-push-daps/terraform/.env-example` file.
 
 ```bash
 cp terraform/.env-example terraform/.env
 ```
 
-Open `example/file-transfer-push-daps/terraform/.env` and set all the variables.
+Open `s3/file-transfer-push-daps/terraform/.env` and set all the variables.
 
 ```bash
 # Navigate to the terraform folder
@@ -223,26 +223,25 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
     ```bash
     export TRANSFER_PROCESSS_ID=$(curl -X POST "http://$CONSUMER_ADDRESS:8182/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
-	--header 'X-API-Key: password' \
+    --header 'X-API-Key: password' \
     --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
-                "connectorId": "consumer",
-                "connectorAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
-				"protocol": "dataspace-protocol-http",
-                "contractId": "'$CONTRACT_AGREEMENT_ID'",
-                "assetId": "1",
-				"dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "'$TF_VAR_consumer_bucketname'",
-					"keyName" : "device1-data.csv"
-				
-				
-				},
-				"managedResources": false
+               "@context": {
+                   "edc": "https://w3id.org/edc/v0.0.1/ns/"
+                   },
+               "@type": "TransferRequestDto",
+               "connectorId": "consumer",
+               "connectorAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
+               "protocol": "dataspace-protocol-http",
+               "contractId": "'$CONTRACT_AGREEMENT_ID'",
+               "assetId": "1",
+               "dataDestination": { 
+                   "type": "IonosS3",
+                   "storage":"s3-eu-central-1.ionoscloud.com",
+                   "bucketName": "'$TF_VAR_consumer_bucketname'",
+                   "path": "folder2/",
+                   "keyName" : "mykey"
+               
+               }
         }'  | jq -r '.["@id"]')
     ```
 

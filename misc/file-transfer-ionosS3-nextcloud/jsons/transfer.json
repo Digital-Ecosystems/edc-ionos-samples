@@ -10,11 +10,11 @@
    "assetId":"asset-1",
    "dataDestination":{
 
-              "type": "IonosS3",
-				"storage":"s3-eu-central-1.ionoscloud.com",
-				"bucketName": "company1",
-                "blobName": "device1-data-2.csv",
-               "keyName":"keyname-1"
+       "type": "IonosS3",
+       "storage":"s3-eu-central-1.ionoscloud.com",
+       "bucketName": "company2",
+       "path": "folder2/",
+       "keyName" : "mykey"
             
 
    }

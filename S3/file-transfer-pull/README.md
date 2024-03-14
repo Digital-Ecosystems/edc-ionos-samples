@@ -16,15 +16,15 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the previous [readme](../../README.md).
+Just check the `Building and Running` section of the previous [readme](https://github.com/ionos-cloud/edc-ionos-s3).
 
 ### Configuration
 In order to configure this sample, please follow this steps:
 (We will use the [DCD](https://dcd.ionos.com))
 1) Create a S3 Key Management: access the `Storage\Object Storage\S3 Key Management` option and generate a Key. Keep the key and the secret;
 2) Create the required buckets: access the `Storage\Object Storage\S3 Web Console` option and create two buckets: company1;
-3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `example/file-transfer-pull/device1-data.csv`;
-4) Open the `example/file-transfer-pull/provider/resources/provider-config.properties` file and insert the key and the secret (step 1);
+3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `s3/file-transfer-pull/device1-data.csv`;
+4) Open the `s3/file-transfer-pull/provider/resources/provider-config.properties` file and insert the key and the secret (step 1);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 
@@ -32,11 +32,11 @@ Note: by design, S3 technology allows only unique names for the buckets. You may
 
 Local execution:
 ```bash
-java -Dedc.keystore=example/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=example/file-transfer-pull/consumer/resources/consumer-vault.properties -Dedc.fs.config=example/file-transfer-pull/consumer/resources/consumer-config.properties -jar example/file-transfer-pull/consumer/build/libs/dataspace-connector.jar
+java -Dedc.keystore=s3/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=s3/file-transfer-pull/consumer/resources/consumer-vault.properties -Dedc.fs.config=s3/file-transfer-pull/consumer/resources/consumer-config.properties -jar s3/file-transfer-pull/consumer/build/libs/dataspace-connector.jar
 
-java -Dedc.keystore=example/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=example/file-transfer-pull/provider/resources/provider-vault.properties -Dedc.fs.config=example/file-transfer-pull/provider/resources/provider-config.properties -jar example/file-transfer-pull/provider/build/libs/dataspace-connector.jar
+java -Dedc.keystore=s3/file-transfer-pull/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=s3/file-transfer-pull/provider/resources/provider-vault.properties -Dedc.fs.config=s3/file-transfer-pull/provider/resources/provider-config.properties -jar s3/file-transfer-pull/provider/build/libs/dataspace-connector.jar
 
-java -jar ./example/file-transfer-pull/backend-service/build/libs/http-pull-connector.jar
+java -jar ./s3/file-transfer-pull/backend-service/build/libs/http-pull-connector.jar
 ```
 
 or
@@ -54,15 +54,15 @@ We will have to call some URL's in order to transfer the file:
 ```console
 curl -H 'Content-Type: application/json' \
      -d '{
-   "edctype": "dataspaceconnector:dataplaneinstance",
-   "id": "http-pull-provider-dataplane",
-   "url": "http://localhost:19192/control/transfer",
-   "allowedSourceTypes": [  "HttpData", "IonosS3" ],
-   "allowedDestTypes": [ "HttpProxy", "HttpData" ],
-    "properties": {
-     "publicApiUrl": "http://localhost:19291/public/"
-   }
- }' \
+           "edctype": "dataspaceconnector:dataplaneinstance",
+           "id": "http-pull-provider-dataplane",
+           "url": "http://localhost:19192/control/transfer",
+           "allowedSourceTypes": [  "HttpData", "IonosS3" ],
+           "allowedDestTypes": [ "HttpProxy", "HttpData" ],
+           "properties": {
+             "publicApiUrl": "http://localhost:19291/public/"
+           }
+         }' \
      -X POST "http://localhost:19193/management/instances"
 ```
 
@@ -70,15 +70,15 @@ curl -H 'Content-Type: application/json' \
 ```console
 curl -H 'Content-Type: application/json' \
      -d '{
-   "edctype": "dataspaceconnector:dataplaneinstance",
-   "id": "http-pull-consumer-dataplane",
-   "url": "http://localhost:29192/control/transfer",
-   "allowedSourceTypes": [ "HttpData" ],
-   "allowedDestTypes": [ "HttpProxy", "HttpData" ],
-   "properties": {
-     "publicApiUrl": "http://localhost:29291/public/"
-   }
- }' \
+           "edctype": "dataspaceconnector:dataplaneinstance",
+           "id": "http-pull-consumer-dataplane",
+           "url": "http://localhost:29192/control/transfer",
+           "allowedSourceTypes": [ "HttpData" ],
+           "allowedDestTypes": [ "HttpProxy", "HttpData" ],
+           "properties": {
+             "publicApiUrl": "http://localhost:29291/public/"
+           }
+         }' \
      -X POST "http://localhost:29193/management/instances"
 ```
 
@@ -202,28 +202,28 @@ Copy the `policy{ @id` from the response of the first curl into this curl and ex
 
 ```console
 curl -d '{
-  "@context": {
-    "edc": "https://w3id.org/edc/v0.0.1/ns/",
-    "odrl": "http://www.w3.org/ns/odrl/2/"
-  },
-  "@type": "NegotiationInitiateRequestDto",
-  "connectorId": "provider",
-  "connectorAddress": "http://localhost:19194/protocol",
-  "consumerId": "consumer",
-  "providerId": "provider",
-  "protocol": "dataspace-protocol-http",
-  "offer": {
-   "offerId": "1:assetId:0ed3140c-0927-4ffd-a225-ba92d894eafe",
-   "assetId": "assetId",
-   "policy": {
-     "@id": "@id":"<"REPLACE HERE">",
-     "@type": "Set",
-     "odrl:permission": [],
-     "odrl:prohibition": [],
-     "odrl:obligation": [],
-     "odrl:target": "assetId"
-   }
-  }
+      "@context": {
+        "edc": "https://w3id.org/edc/v0.0.1/ns/",
+        "odrl": "http://www.w3.org/ns/odrl/2/"
+      },
+      "@type": "NegotiationInitiateRequestDto",
+      "connectorId": "provider",
+      "connectorAddress": "http://localhost:19194/protocol",
+      "consumerId": "consumer",
+      "providerId": "provider",
+      "protocol": "dataspace-protocol-http",
+      "offer": {
+           "offerId": "1:assetId:0ed3140c-0927-4ffd-a225-ba92d894eafe",
+           "assetId": "assetId",
+           "policy": {
+             "@id": "@id":"<"REPLACE HERE">",
+             "@type": "Set",
+             "odrl:permission": [],
+             "odrl:prohibition": [],
+             "odrl:obligation": [],
+             "odrl:target": "assetId"
+       }
+      }
 }' -X POST -H 'content-type: application/json' http://localhost:29193/management/v2/contractnegotiations \
  -s | jq -r '.["@id"]'
 ```
@@ -274,7 +274,6 @@ curl -X POST "http://localhost:29193/management/v2/transferprocesses" \
         "connectorAddress": "http://localhost:19194/protocol",
         "contractId": "<CONTRACT AGREEMENT ID>",
         "assetId": "assetId",
-        "managedResources": false,
         "protocol": "dataspace-protocol-http",
         "dataDestination": { 
           "type": "HttpProxy" 

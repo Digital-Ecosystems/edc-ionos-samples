@@ -17,18 +17,18 @@ You will need the following:
 
 ### Building the project
 
-Just check the `Building and Running` section of the previous [readme](../../README.md).
+Just check the `Building and Running` section of the previous [readme](https://github.com/ionos-cloud/edc-ionos-s3).
 
 ### Configuration
 In order to configure this sample, please follow this steps:
 (We will use the [DCD](https://dcd.ionos.com))
 1) Create a S3 Key Management: access the `Storage\Object Storage\S3 Key Management` option and generate a Key. Keep the key and the secret;
 2) Create the required buckets: access the `Storage\Object Storage\S3 Web Console` option and create two buckets: company1 and company2;
-3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `example/file-transfer-persistence/device1-data.csv`;
-4) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](../../ionos_token.md);
+3) Upload a file named `device1-data.csv` into the company1 bucket. You can use the `s3/file-transfer-persistence/device1-data.csv`;
+4) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/blob/main/ionos_token.md);
 5) Copy the required configuration fields:  
-Consumer: open the `example/file-transfer-persistence/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;
-Provider: open the `example/file-transfer-persistence/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
+Consumer: open the `s3/file-transfer-persistence/consumer/resources/consumer-config.properties` (or use an Hashicorp Vault instance) and add the field `edc.ionos.token` with the token;
+Provider: open the `s3/file-transfer-persistence/provider/resources/provider-config.properties` (or use an Hashicorp Vault instance) and insert the key - `edc.ionos.access.key` and the secret - `edc.ionos.secret.access.key` (step 1);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 
@@ -104,29 +104,29 @@ curl --location --request POST 'http://localhost:9192/management/v2/contractnego
 --header 'X-API-Key: password' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-	"@context": {
-    "edc": "https://w3id.org/edc/v0.0.1/ns/",
-    "odrl": "http://www.w3.org/ns/odrl/2/"
-  },
-  "@type": "NegotiationInitiateRequestDto",
-  "connectorId": "provider",
-  "connectorAddress": "http://provider:8282/protocol",
-  "protocol": "dataspace-protocol-http",
-  "offer": {
-    "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-    "assetId": "1",
-    "policy": {"@id":<"REPLACE HERE">,
-			"@type": "odrl:Set",
-			"odrl:permission": {
-				"odrl:target": "1",
-				"odrl:action": {
-					"odrl:type": "USE"
-				}
-			},
-			"odrl:prohibition": [],
-			"odrl:obligation": [],
-			"odrl:target": "1"}
-  }
+            "@context": {
+               "edc": "https://w3id.org/edc/v0.0.1/ns/",
+               "odrl": "http://www.w3.org/ns/odrl/2/"
+             },
+             "@type": "NegotiationInitiateRequestDto",
+             "connectorId": "provider",
+             "connectorAddress": "http://provider:8282/protocol",
+             "protocol": "dataspace-protocol-http",
+             "offer": {
+               "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
+               "assetId": "1",
+               "policy": {"@id":<"REPLACE HERE">,
+                        "@type": "odrl:Set",
+                        "odrl:permission": {
+                            "odrl:target": "1",
+                            "odrl:action": {
+                                "odrl:type": "USE"
+                            }
+                        },
+                        "odrl:prohibition": [],
+                        "odrl:obligation": [],
+                        "odrl:target": "1"}
+             }
 }'
 ```
 
@@ -205,24 +205,24 @@ Copy the value of the `edc:contractAgreementId` from the response of the previou
 
 curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
     --header "Content-Type: application/json" \
-	--header 'X-API-Key: password' \
+    --header 'X-API-Key: password' \
     --data '{	
-				"@context": {
-					"edc": "https://w3id.org/edc/v0.0.1/ns/"
-					},
-				"@type": "TransferRequestDto",
-                "connectorId": "consumer",
-                "connectorAddress": "http://provider:8282/protocol",
-				"protocol": "dataspace-protocol-http",
-                "contractId": "<CONTRACT AGREEMENT ID>",
-                "assetId": "1",
-				"dataDestination": { 
-					"type": "IonosS3",
-					"storage":"s3-eu-central-1.ionoscloud.com",
-					"bucketName": "company2",
-					"keyName" : "device1-data.csv"
-				},
-				"managedResources": false
+            "@context": {
+                "edc": "https://w3id.org/edc/v0.0.1/ns/"
+            },
+            "@type": "TransferRequestDto",
+            "connectorId": "consumer",
+            "connectorAddress": "http://provider:8282/protocol",
+            "protocol": "dataspace-protocol-http",
+            "contractId": "<CONTRACT AGREEMENT ID>",
+            "assetId": "1",
+            "dataDestination": { 
+                "type": "IonosS3",
+                "storage":"s3-eu-central-1.ionoscloud.com",
+                "bucketName": "company2",
+                "path": "folder2/",
+                "keyName" : "mykey"
+            }
         }'
 ```
 You will have an answer like the following:
