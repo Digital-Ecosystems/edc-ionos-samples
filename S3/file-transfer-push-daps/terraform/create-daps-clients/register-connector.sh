@@ -64,7 +64,7 @@ CLIENT_ID="$SKI:$AKI"
 CLIENT_CERT_SHA="$(openssl x509 -in "$CLIENT_CERT" -noout -sha256 -fingerprint | tr '[:upper:]' '[:lower:]' | tr -d : | sed 's/.*=//')"
 
 mkdir -p ./connectors/$CLIENT_NAME/config/
-cat > ./connectors/$CLIENT_NAME/config/clients.yml <<EOF
+cat >> ./connectors/$CLIENT_NAME/config/clients.yml <<EOF
 - client_id: $CLIENT_ID
   client_name: $CLIENT_NAME
   grant_types: client_credentials
@@ -90,7 +90,7 @@ cp "$CLIENT_CERT" ./connectors/$CLIENT_NAME/keys/clients/${CLIENT_ID}.cert
 
 cat ./connectors/$CLIENT_NAME/config/clients.yml | kubectl exec -n $KUBERNETES_NAMESPACE -i $OMEJDN_SERVER_POD_NAME -- sh -c 'cat >> /opt/config/clients.yml'
 
-kubectl cp -n $KUBERNETES_NAMESPACE ./connectors/$CLIENT_NAME/keys/ $OMEJDN_SERVER_POD_NAME:/opt/
+kubectl cp -n $KUBERNETES_NAMESPACE ./connectors/$CLIENT_NAME/keys/clients/ $OMEJDN_SERVER_POD_NAME:/opt/keys/
 
 openssl pkcs12 -export -in ./connectors/$CLIENT_NAME/keys/$CLIENT_NAME.cert -inkey ./connectors/$CLIENT_NAME/keys/$CLIENT_NAME.key -out ./connectors/$CLIENT_NAME/keystore.p12 -passout pass:$KEYSTORE_PASSWORD
 

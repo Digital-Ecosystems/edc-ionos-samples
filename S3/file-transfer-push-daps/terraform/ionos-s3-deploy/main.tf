@@ -8,35 +8,18 @@ variable "kubeconfig" {
   type = string
 }
 
+variable "daps_url" {}
+variable "registry_url" {}
+variable "registry_username" {}
+variable "registry_password" {}
+
+# Consumer
 variable "namespace_consumer" {
   default = "edc-ionos-s3-consumer"
 }
-
-variable "namespace_provider" {
-  default = "edc-ionos-s3-provider"
+variable "consumer_dsp_webhook_address" {
+  default = "http://localhost:8282/protocol"
 }
-
-variable "edc_file_transfer_blob_name" {
-  default = "device1-data.csv"
-  type = string
-}
-
-variable "edc_file_transfer_bucket_name" {
-  default = "provider"
-  type = string
-}
-
-variable "consumer_ids_webhook_address" {
-  default = "http://localhost:8282"
-}
-
-variable "daps_url" {}
-variable "container_registry_url" {}
-variable "container_repository_username" {
-  default = "edc-ionos-s3"
-}
-
-# Consumer
 variable "consumer_edc_keystore_password" {
   default = "consumer"
 }
@@ -45,8 +28,11 @@ variable "consumer_image_tag" {
 }
 
 # Provider
-variable "provider_ids_webhook_address" {
-  default = "http://localhost:8282"
+variable "namespace_provider" {
+  default = "edc-ionos-s3-provider"
+}
+variable "provider_dsp_webhook_address" {
+  default = "http://localhost:8282/protocol"
 }
 variable "provider_edc_keystore_password" {
   default = "provider"
@@ -104,8 +90,8 @@ resource "helm_release" "edc-ionos-s3-consumer" {
   }
 
   set {
-    name  = "ids.webhook.address"
-    value = var.consumer_ids_webhook_address
+    name  = "edc.dsp.callback.address"
+    value = var.consumer_dsp_webhook_address
   }
 
   set {
@@ -120,7 +106,7 @@ resource "helm_release" "edc-ionos-s3-consumer" {
 
   set {
     name  = "edc.oauth.tokenUrl"
-    value = "${var.daps_url}/auth/token"
+    value = "${var.daps_url}/token"
   }
 
   set {
@@ -130,12 +116,12 @@ resource "helm_release" "edc-ionos-s3-consumer" {
 
   set {
     name  = "edc.oauth.providerJwksUrl"
-    value = "${var.daps_url}/auth/jwks.json"
+    value = "${var.daps_url}/jwks.json"
   }
 
   set {
     name  = "image.repository"
-    value = "${var.container_registry_url}/edc-ionos-s3"
+    value = "${var.registry_url}/edc-ionos-s3"
   }
 
   set {
@@ -145,22 +131,17 @@ resource "helm_release" "edc-ionos-s3-consumer" {
 
   set {
     name  = "imagePullSecret.username"
-    value = "${var.container_repository_username}"
+    value = "${var.registry_username}"
   }
 
   set {
     name  = "imagePullSecret.password"
-    value = "${file("../build-and-push-docker-images/registry_password.txt")}"
+    value = "${var.registry_password}"
   }
 
   set {
     name  = "imagePullSecret.server"
-    value = "${var.container_registry_url}"
-  }
-
-  set {
-    name  = "service.type"
-    value = "LoadBalancer"
+    value = "${var.registry_url}"
   }
 }
 
@@ -188,16 +169,6 @@ resource "helm_release" "edc-ionos-s3-provider" {
   }
 
   set {
-    name  = "edc.file.transfer.blob.name"
-    value = var.edc_file_transfer_blob_name
-  }
-
-  set {
-    name  = "edc.file.transfer.bucket.name"
-    value = var.edc_file_transfer_bucket_name
-  }
-
-  set {
     name  = "edc.ionos.accessKey"
     value = var.s3_access_key
   }
@@ -213,8 +184,8 @@ resource "helm_release" "edc-ionos-s3-provider" {
   }
 
   set {
-    name  = "ids.webhook.address"
-    value = var.provider_ids_webhook_address
+    name  = "edc.dsp.callback.address"
+    value = var.provider_dsp_webhook_address
   }
 
   set {
@@ -229,7 +200,7 @@ resource "helm_release" "edc-ionos-s3-provider" {
 
   set {
     name  = "edc.oauth.tokenUrl"
-    value = "${var.daps_url}/auth/token"
+    value = "${var.daps_url}/token"
   }
 
   set {
@@ -239,12 +210,12 @@ resource "helm_release" "edc-ionos-s3-provider" {
 
   set {
     name  = "edc.oauth.providerJwksUrl"
-    value = "${var.daps_url}/auth/jwks.json"
+    value = "${var.daps_url}/jwks.json"
   }
 
   set {
     name  = "image.repository"
-    value = "${var.container_registry_url}/edc-ionos-s3"
+    value = "${var.registry_url}/edc-ionos-s3"
   }
 
   set {
@@ -254,22 +225,17 @@ resource "helm_release" "edc-ionos-s3-provider" {
 
   set {
     name  = "imagePullSecret.username"
-    value = "${var.container_repository_username}"
+    value = "${var.registry_username}"
   }
 
   set {
     name  = "imagePullSecret.password"
-    value = "${file("../build-and-push-docker-images/registry_password.txt")}"
+    value = "${var.registry_password}"
   }
 
   set {
     name  = "imagePullSecret.server"
-    value = "${var.container_registry_url}"
-  }
-
-  set {
-    name  = "service.type"
-    value = "LoadBalancer"
+    value = "${var.registry_url}"
   }
 
 }

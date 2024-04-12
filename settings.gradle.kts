@@ -1,5 +1,4 @@
 //S3
-include(":S3:file-transfer-push-daps:transfer-file")
 include(":S3:file-transfer-push-daps:provider")
 include(":S3:file-transfer-push-daps:consumer")
 include(":S3:file-transfer-push:provider")
