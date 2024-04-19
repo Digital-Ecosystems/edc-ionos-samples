@@ -7,9 +7,9 @@ data:
     web.http.port={{ .Values.web.http.port }}
     web.http.path={{ .Values.web.http.path }}
     web.http.management.port={{ .Values.web.http.management.port }}
-    web.http.management.path={{ .Values.web.http.management.path }}    
+    web.http.management.path={{ .Values.web.http.management.path }}
     web.http.protocol.port={{ .Values.web.http.protocol.port }}
-    web.http.protocol.path={{ .Values.web.http.protocol.path }}    
+    web.http.protocol.path={{ .Values.web.http.protocol.path }}
     web.http.control.port={{ .Values.web.http.control.port }}
     web.http.control.path={{ .Values.web.http.control.path }}
     web.http.public.port={{ .Values.web.http.public.port }}
@@ -22,7 +22,7 @@ data:
     edc.vault.name={{ .Values.edc.vault.name }}
     edc.vault.hashicorp.url={{ .Values.edc.vault.hashicorp.url }}
     edc.vault.hashicorp.token={{ .Values.edc.vault.hashicorp.token }}
-    edc.vault.hashicorp.timeout.seconds={{ .Values.edc.vault.hashicorp.timeout.seconds }}    
+    edc.vault.hashicorp.timeout.seconds={{ .Values.edc.vault.hashicorp.timeout.seconds }}
     edc.ionos.access.key=accessKey
     edc.ionos.secret.key=secretKey
     edc.ionos.endpoint=endpoint
