@@ -7,9 +7,9 @@ data:
     web.http.port={{ .Values.web.http.port }}
     web.http.path={{ .Values.web.http.path }}
     web.http.management.port={{ .Values.web.http.management.port }}
-    web.http.management.path={{ .Values.web.http.management.path }}    
+    web.http.management.path={{ .Values.web.http.management.path }}
     web.http.protocol.port={{ .Values.web.http.protocol.port }}
-    web.http.protocol.path={{ .Values.web.http.protocol.path }}    
+    web.http.protocol.path={{ .Values.web.http.protocol.path }}
     web.http.control.port={{ .Values.web.http.control.port }}
     web.http.control.path={{ .Values.web.http.control.path }}
     web.http.public.port={{ .Values.web.http.public.port }}
