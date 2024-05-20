@@ -16,7 +16,7 @@ You will need the following:
 - Linux shell or PowerShell;
 - Linux JQ tool;
 - [Kubernetes cluster](https://kubernetes.io/docs/setup/) - **Note:** You can use the terraform script in [ionos-kubernetes-cluster](https://github.com/Digital-Ecosystems/ionos-kubernetes-cluster) repository to deploy a kubernetes cluster on IONOS DCD.
-- [DAPS server](https://github.com/Digital-Ecosystems/general-des-development/tree/main/omejdn-daps) - **Note:** You can follow the instructions in the [ionos-daps](https://github.com/Digital-Ecosystems/ionos-daps) repository to deploy a DAPS server on IONOS DCD.
+- [DAPS server](https://github.com/Digital-Ecosystems/ionos-daps) - **Note:** You can follow the instructions in the [ionos-daps](https://github.com/Digital-Ecosystems/ionos-daps) repository to deploy a DAPS server on IONOS DCD.
 - 3 public IPs
 - DNS server and domain name
 
@@ -26,7 +26,7 @@ You will need the following:
 ### Configuration
 In order to configure this sample, please follow this steps:
 (We will use the [DCD](https://dcd.ionos.com))
-1) Create a Kubernetes cluster and deploy DAPS service. Follow the instructions from the [general-des-development](https://github.com/Digital-Ecosystems/general-des-development/tree/main/omejdn-daps).
+1) Create a Kubernetes cluster and deploy DAPS service. Follow the instructions from the [ionos-daps](https://github.com/Digital-Ecosystems/ionos-daps).
 2) Create a Repository on a Container Registry service and get a user and password to access it.
 3) Create a S3 Key Management: access the `Storage/Object Storage/S3 Key Management` option and generate a Key. Keep the key and the secret;
 4) Create the required buckets: access the `Storage/Object Storage/S3 Web Console` option and create two buckets: one for the provider and another for the consumer;
@@ -389,7 +389,6 @@ Consumer
 ```bash
 kubectl logs -n edc-ionos-s3-provider deploy/edc-ionos-s3-provider -f
 ```
-
 
 ## Cleanup
 
