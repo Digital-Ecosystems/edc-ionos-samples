@@ -14,8 +14,9 @@ You will need the following:
 - Docker;
 - GIT;
 - Linux shell or PowerShell;
+- Linux JQ tool;
 - [Kubernetes cluster](https://kubernetes.io/docs/setup/) - **Note:** You can use the terraform script in [ionos-kubernetes-cluster](https://github.com/Digital-Ecosystems/ionos-kubernetes-cluster) repository to deploy a kubernetes cluster on IONOS DCD.
-- [DAPS server](https://github.com/Digital-Ecosystems/general-des-development/tree/main/omejdn-daps) - **Note:** You can follow the instructions in the [General-des-development](https://github.com/Digital-Ecosystems/general-des-development/tree/main/omejdn-daps) repository to deploy a DAPS server on IONOS DCD.
+- [DAPS server](https://github.com/Digital-Ecosystems/ionos-daps) - **Note:** You can follow the instructions in the [ionos-daps](https://github.com/Digital-Ecosystems/ionos-daps) repository to deploy a DAPS server on IONOS DCD.
 - 3 public IPs
 - DNS server and domain name
 
@@ -25,30 +26,28 @@ You will need the following:
 ### Configuration
 In order to configure this sample, please follow this steps:
 (We will use the [DCD](https://dcd.ionos.com))
-1) Create a Kubernetes cluster and deploy DAPS service. Follow the instructions from the [general-des-development](https://github.com/Digital-Ecosystems/general-des-development/tree/main/omejdn-daps).
-2) Create a S3 Key Management: access the `Storage/Object Storage/S3 Key Management` option and generate a Key. Keep the key and the secret;
-3) Create the required buckets: access the `Storage/Object Storage/S3 Web Console` option and create two buckets: one for the provider and another for the consumer;
-4) Upload a file named `device1-data.csv` into the provider bucket. You can use the `s3/file-transfer-push-daps/device1-data.csv`;
-5) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/blob/main/ionos_token.md);
+1) Create a Kubernetes cluster and deploy DAPS service. Follow the instructions from the [ionos-daps](https://github.com/Digital-Ecosystems/ionos-daps).
+2) Create a Repository on a Container Registry service and get a user and password to access it.
+3) Create a S3 Key Management: access the `Storage/Object Storage/S3 Key Management` option and generate a Key. Keep the key and the secret;
+4) Create the required buckets: access the `Storage/Object Storage/S3 Web Console` option and create two buckets: one for the provider and another for the consumer;
+5) Upload a file named `device1-data.csv` into the provider bucket. You can use the `s3/file-transfer-push-daps/device1-data.csv`;
+6) Create a token that the consumer will use to do the provisioning. Take a look at this [documentation](https://github.com/ionos-cloud/edc-ionos-s3/blob/main/ionos_token.md);
 
 Note: by design, S3 technology allows only unique names for the buckets. You may find an error saying that the bucket name already exists.
 
 ## Usage
 
-Create `s3/file-transfer-push-daps/terraform/.env` file from the `s3/file-transfer-push-daps/terraform/.env-example` file.
+Create `S3/file-transfer-push-daps/terraform/.env` file from the `s3/file-transfer-push-daps/terraform/.env-example` file.
 
 ```bash
 cp terraform/.env-example terraform/.env
 ```
 
-Open `s3/file-transfer-push-daps/terraform/.env` and set all the variables.
+Open `S3/file-transfer-push-daps/terraform/.env` and set all the variables.
 
 ```bash
 # Navigate to the terraform folder
 cd terraform
-
-# Load the environment variables
-source .env
 
 # Deploy the services
 ./deploy-services.sh
@@ -58,12 +57,119 @@ source .env
 # Set the provider and consumer addresses
 export PROVIDER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-provider edc-ionos-s3-provider -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-consumer -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
 ```
 
 ## Transfer file
 
-1. Fetch the catalog on consumer side
+1. Create the Asset on provider side
+
+   Run the following command:
+    ```bash
+    curl -X POST "http://$PROVIDER_ADDRESS:8182/management/v3/assets" \
+    --header 'X-API-Key: password' \
+    --header 'Content-Type: application/json' \
+    -d '{
+        "@context": {
+            "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+        },
+        "@id": "anAsset",
+        "properties": {
+            "name": "product description",
+            "contenttype": "application/json"
+        },
+        "dataAddress": {
+            "type": "IonosS3",
+            "keyName": "device1-data.csv",
+            "storage": "s3-eu-central-1.ionoscloud.com",
+            "bucketName": "$BUCKET_NAME",
+            "blobName": "device1-data.csv"
+        }
+    }' -s | jq 
+    ```
+
+    Sample output:
+    ```json
+    {
+        "@type": "IdResponse",
+        "@id": "anAsset",
+        "createdAt": 1712892845788,
+        "@context": {
+            "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+            "edc": "https://w3id.org/edc/v0.0.1/ns/",
+            "odrl": "http://www.w3.org/ns/odrl/2/"
+        }
+    }
+    ```
+
+2. Create the Policy definition on provider side
+
+   Run the following command:
+    ```bash
+    curl -X POST "http://$PROVIDER_ADDRESS:8182/management/v2/policydefinitions" \
+    --header 'X-API-Key: password' \
+    --header 'Content-Type: application/json' \
+    -d '{
+        "@context":{
+            "edc":"https://w3id.org/edc/v0.0.1/ns/",
+            "odrl":"http://www.w3.org/ns/odrl/2/"
+        },
+        "@id":"aPolicy",
+        "policy":{
+            "@type":"set",
+            "odrl:permission":[],
+            "odrl:prohibition":[],
+            "odrl:obligation":[]
+        }
+    }' -s | jq
+    ```
+
+    Sample output:
+    ```json
+    {
+        "@type": "IdResponse",
+        "@id": "policy-663",
+        "createdAt": 1712892939010,
+        "@context": {
+            "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+            "edc": "https://w3id.org/edc/v0.0.1/ns/",
+            "odrl": "http://www.w3.org/ns/odrl/2/"
+        }
+    }
+   ```
+
+3. Create the contract definition on provider side
+
+   Run the following command:
+    ```bash
+    curl -X POST "http://$PROVIDER_ADDRESS:8182/management/v2/contractdefinitions" \
+    --header 'X-API-Key: password' \
+    --header 'Content-Type: application/json' \
+    -d '{
+        "@context":{
+            "edc":"https://w3id.org/edc/v0.0.1/ns/"
+        },
+        "@id":"aContract",
+        "accessPolicyId":"aPolicy",
+        "contractPolicyId":"aPolicy",
+        "assetsSelector": []
+    }' -s | jq
+    ```
+
+    Sample output:
+    ```json
+    {
+        "@type": "IdResponse",
+        "@id": "contract-481",
+        "createdAt": 1712892991371,
+        "@context": {
+            "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+            "edc": "https://w3id.org/edc/v0.0.1/ns/",
+            "odrl": "http://www.w3.org/ns/odrl/2/"
+        }
+    }
+    ```
+
+4. Fetch the catalog on consumer side
 
     In order to offer any data, the consumer can fetch the catalog from the provider, that will contain all the contract offers available for negotiation. In our case, it will contain a single contract offer. To get the catalog from the consumer side, you can use the following command:
 
@@ -75,7 +181,7 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
           "@context": {
             "edc": "https://w3id.org/edc/v0.0.1/ns/"
           },
-          "providerUrl": "http://$PROVIDER_ADDRESS:8282/protocol",
+          "counterPartyAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
           "protocol": "dataspace-protocol-http"
         }'-s | jq -r  '.["dcat:dataset"]["odrl:hasPolicy"]["@id"]')
     ```
@@ -181,7 +287,7 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
           "dspace": "https://w3id.org/dspace/v0.8/"
         }
       }
- 
+   ```
 
 3. Getting the contract agreement id
 
@@ -232,15 +338,14 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
                "connectorId": "consumer",
                "connectorAddress": "http://$PROVIDER_ADDRESS:8282/protocol",
                "protocol": "dataspace-protocol-http",
-               "contractId": "'$CONTRACT_AGREEMENT_ID'",
+               "contractId": "$CONTRACT_AGREEMENT_ID",
                "assetId": "1",
                "dataDestination": { 
                    "type": "IonosS3",
                    "storage":"s3-eu-central-1.ionoscloud.com",
-                   "bucketName": "'$TF_VAR_consumer_bucketname'",
+                   "bucketName": "$TF_VAR_consumer_bucketname",
                    "path": "folder2/",
                    "keyName" : "mykey"
-               
                }
         }'  | jq -r '.["@id"]')
     ```
@@ -248,7 +353,7 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
     Then, we will get a UUID in the response. This time, this is the ID of the TransferProcess ( process id) created on the consumer side, because like the contract negotiation, the data transfer is handled in a state machine and performed asynchronously.
 
     You will have an answer like the following:
-    ```bash
+    ```json
     {
       "@type": "edc:IdResponseDto",
       "@id": "f9083e20-61a7-41c3-87f2-964de0ed2f52",
@@ -270,7 +375,6 @@ export CONSUMER_ADDRESS=$(kubectl get svc -n edc-ionos-s3-consumer edc-ionos-s3-
     curl -X GET -H 'X-Api-Key: password' "http://$CONSUMER_ADDRESS:8182/api/v2/management/transferprocess/$TRANSFER_PROCESSS_ID"
     ```
 
-
 After executing all the steps, we can now check the consumer bucket of our IONOS S3 to see if the file has been correctly transfered.
 
 ## Troubleshooting
@@ -285,7 +389,6 @@ Consumer
 ```bash
 kubectl logs -n edc-ionos-s3-provider deploy/edc-ionos-s3-provider -f
 ```
-
 
 ## Cleanup
 

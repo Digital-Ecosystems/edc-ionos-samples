@@ -33,45 +33,36 @@ repositories {
 		}
 	}
 }
-val javaVersion: String by project
 val edcGroup: String by project
 val edcVersion: String by project
 val ionosGroup: String by project
 val ionosVersion: String by project
 
-val okHttpVersion: String by project
-val rsApi: String by project
-val metaModelVersion: String by project
-
-
 dependencies {
-
 	implementation("${edcGroup}:control-plane-core:${edcVersion}")
+	implementation("${edcGroup}:control-plane-api:${edcVersion}")
 	implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
 
-	implementation("${edcGroup}:api-observability:${edcVersion}")
-	
-	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
+	implementation("${edcGroup}:data-plane-client:${edcVersion}")
+	implementation("${edcGroup}:data-plane-selector-client:${edcVersion}")
+	implementation("${edcGroup}:data-plane-selector-core:${edcVersion}")
+	implementation("${edcGroup}:transfer-data-plane:${edcVersion}")
+
+	implementation("${edcGroup}:vault-filesystem:${edcVersion}")
+	implementation("${ionosGroup}:vault-hashicorp:${ionosVersion}")
 
 	implementation("${edcGroup}:http:${edcVersion}")
-	
-	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")	
-	
-	implementation("$edcGroup:dsp:$edcVersion")
+	implementation("${edcGroup}:dsp:${edcVersion}")
+	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")
+	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
 	
 	implementation("${edcGroup}:management-api:${edcVersion}")
-
-	implementation("${ionosGroup}:vault-hashicorp:${ionosVersion}")
-    implementation("${edcGroup}:vault-filesystem:${edcVersion}")
+	implementation("${edcGroup}:api-observability:${edcVersion}")
 
     implementation("${edcGroup}:oauth2-service:${edcVersion}")
     implementation("${edcGroup}:oauth2-daps:${edcVersion}")
 
 	implementation("${ionosGroup}:provision-ionos-s3:${ionosVersion}")
-	
-	implementation("${edcGroup}:catalog-api:${edcVersion}")
-		
-	implementation("${edcGroup}:iam-mock:${edcVersion}")
 }
 
 application {

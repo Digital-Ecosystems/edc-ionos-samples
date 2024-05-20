@@ -8,6 +8,8 @@ fi
 
 set -e
 
+source .env
+
 # Check for environment variables
 if [ -z `printenv TF_VAR_kubeconfig` ]; then
     echo "Stopping because TF_VAR_kubeconfig is undefined"
@@ -21,11 +23,6 @@ fi
 
 if [ -z `printenv TF_VAR_daps_url` ]; then
     echo "Stopping because TF_VAR_daps_url is undefined"
-    exit 1
-fi
-
-if [ -z `printenv TF_VAR_edc_file_transfer_bucket_name` ]; then
-    echo "Stopping because TF_VAR_kubeconfig is TF_VAR_edc_file_transfer_bucket_name"
     exit 1
 fi
 
@@ -49,12 +46,20 @@ if [ -z `printenv TF_VAR_s3_endpoint` ]; then
     exit 1
 fi
 
-
-if [ -z `printenv TF_VAR_registry_name` ]; then
-    export TF_VAR_registry_name=edc-example-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
+if [ -z `printenv TF_VAR_registry_url` ]; then
+    echo "Stopping because TF_VAR_registry_url is undefined"
+    exit 1
 fi
 
-export TF_VAR_container_registry_url=$TF_VAR_registry_name.cr.de-fra.ionos.com
+if [ -z `printenv TF_VAR_registry_username` ]; then
+    echo "Stopping because TF_VAR_registry_username is undefined"
+    exit 1
+fi
+
+if [ -z `printenv TF_VAR_registry_password` ]; then
+    echo "Stopping because TF_VAR_registry_password is undefined"
+    exit 1
+fi
 
 # Build the project
 cd build-project
