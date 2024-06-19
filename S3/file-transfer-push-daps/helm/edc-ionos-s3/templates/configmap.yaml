@@ -4,6 +4,7 @@ metadata:
   name: {{ include "edc-ionos-s3.fullname" . }}-config
 data:
   config.properties: |
+    edc.participant.id={{ .Values.edc.oauth.clientId }}
     web.http.port={{ .Values.web.http.port }}
     web.http.path={{ .Values.web.http.path }}
     web.http.management.port={{ .Values.web.http.management.port }}
@@ -34,4 +35,4 @@ data:
     edc.oauth.provider.jwks.url={{ .Values.edc.oauth.providerJwksUrl }}
     edc.oauth.certificate.alias={{ .Values.edc.oauth.certificateAlias }}
     edc.oauth.private.key.alias={{ .Values.edc.oauth.privateKeyAlias }}
-    edc.iam.token.scope={{ .Values.edc.oauth.audience }}
+    edc.iam.token.scope={{ .Values.edc.oauth.tokenScope }}

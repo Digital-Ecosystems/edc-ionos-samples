@@ -57,6 +57,7 @@ edc:
     tokenUrl: https://omejdn-nginx.example.com/token
     clientId: # from the daps clients.yml
     audience: idsc:IDS_CONNECTORS_ALL
+    tokenScope: idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
     providerJwksUrl: https://omejdn-nginx.example.com/jwks.json
     certificateAlias: 1
     privateKeyAlias: 1
