@@ -37,13 +37,16 @@ dependencies {
     implementation("${edcGroup}:dsp:${edcVersion}")
     //file-transfer
     implementation("${edcGroup}:data-plane-core:${edcVersion}")
-    implementation ("${ionosGroup}:provision-ionos-s3:${ionosVersion}")
+
     implementation("${edcGroup}:data-plane-client:${edcVersion}")
     implementation("${edcGroup}:data-plane-selector-client:${edcVersion}")
     implementation("${edcGroup}:data-plane-selector-core:${edcVersion}")
     implementation("${edcGroup}:transfer-data-plane:${edcVersion}")
     implementation("${edcGroup}:data-plane-http:${edcVersion}")
     implementation("${edcGroup}:http:${edcVersion}")
+
+    implementation("${ionosGroup}:dataplane-ionos-nextcloud:${nextcloudVersion}")
+    implementation ("${ionosGroup}:data-plane-ionos-s3:${ionosVersion}")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
