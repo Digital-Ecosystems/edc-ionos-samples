@@ -50,28 +50,9 @@ val metaModelVersion: String by project
 
 dependencies {
 
-	implementation("${edcGroup}:control-plane-core:${edcVersion}")
-    implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
 
-    implementation("${edcGroup}:api-observability:${edcVersion}")
-	
-	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
-
-	implementation("${edcGroup}:http:${edcVersion}")
-
-	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")	
-
-    implementation("${edcGroup}:management-api:${edcVersion}")
-	
-	implementation("${edcGroup}:vault-hashicorp:${edcVersion}")	
-
-
-	implementation("${edcGroup}:iam-mock:${edcVersion}")
-	
+    // Ionos Extensions
     implementation(project(":S3:file-transfer-push:transfer-file"))
-	
-	//new
-	implementation("${edcGroup}:dsp:${edcVersion}")
 	
 	
 	

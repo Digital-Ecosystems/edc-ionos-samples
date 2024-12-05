@@ -74,7 +74,7 @@ You will have an output like the following:
 		"@id": "6519fb05-c1f3-4a81-a4c5-93f5ab128a22",
 		"@type": "dcat:Dataset",
 		"odrl:hasPolicy": {
-			"@id": "1:1:67e38ac2-26e0-40c0-9628-e864f4e260f7",
+			"@id": "Y29udHJhY3QtNjIz:YXNzZXQtMTU0:MzBiMTlhMmQtNmE2Ni00MjVjLThmZmYtMDZhZmE0NGY1YTdj",
 			"@type": "odrl:Set",
 			"odrl:permission": {
 				"odrl:target": "1",
@@ -111,33 +111,23 @@ You will have an output like the following:
 Copy the `policy{ @id` from the response of the first curl into this curl and execute it.
 
 ```
-curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
+curl --location --request POST 'http://localhost:9192/management/v3/contractnegotiations' \
      --header 'X-API-Key: password' \
      --header 'Content-Type: application/json' \
      --data-raw '{
-         "@context": {
-         "edc": "https://w3id.org/edc/v0.0.1/ns/",
-         "odrl": "http://www.w3.org/ns/odrl/2/"
+          "@context":{
+          "edc":"https://w3id.org/edc/v0.0.1/ns/",
+          "odrl":"http://www.w3.org/ns/odrl/2/"
        },
-       "@type": "NegotiationInitiateRequestDto",
-       "connectorId": "provider",
-       "connectorAddress": "http://localhost:8282/protocol",
+       "counterPartyAddress": "http://localhost:8282/protocol",
        "protocol": "dataspace-protocol-http",
-       "offer": {
-         "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-         "assetId": "1",
-         "policy": {"@id":<"REPLACE HERE">,
-                 "@type": "odrl:Set",
-                 "odrl:permission": {
-                     "odrl:target": "1",
-                     "odrl:action": {
-                         "odrl:type": "USE"
-                     }
-                 },
-                 "odrl:prohibition": [],
-                 "odrl:obligation": [],
-                 "odrl:target": "1"}
-       }
+      "policy": {
+              "@context": "http://www.w3.org/ns/odrl.jsonld",
+              "@id": "Y29udHJhY3QtNjIz:YXNzZXQtMTU0:MzBiMTlhMmQtNmE2Ni00MjVjLThmZmYtMDZhZmE0NGY1YTdj",
+              "@type": "Offer",
+              "assigner": "provider",
+              "target": "asset-154"
+        }
      }'
 ```
 
@@ -173,7 +163,7 @@ You will have an answer like the following:
 	"edc:state": "FINALIZED",
 	"edc:counterPartyAddress": "http://localhost:8282/protocol",
 	"edc:callbackAddresses": [],
-	"edc:contractAgreementId": "1:1:5c0a5d3c-69ea-4fb5-9d3d-e33ec280cde9",
+	"edc:contractAgreementId": "044b5483-7681-4e11-bd9a-675063caff28",
 	"@context": {
 		"dct": "https://purl.org/dc/terms/",
 		"edc": "https://w3id.org/edc/v0.0.1/ns/",
@@ -196,21 +186,18 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
                 "@context": {
                     "edc": "https://w3id.org/edc/v0.0.1/ns/"
                     },
-                "@type": "TransferRequestDto",
+
                 "connectorId": "consumer",
                 "connectorAddress": "http://localhost:8282/protocol",
                 "protocol": "dataspace-protocol-http",
                 "contractId": "<CONTRACT AGREEMENT ID>",
-                "assetId": "1",
+                "transferType": "IonosS3-PUSH",               
                 "dataDestination": { 
                     "type": "IonosS3",
-                    "storage":"s3-eu-central-1.ionoscloud.com",
                     "bucketName": "company2",
                     "path": "folder2/",
                     "keyName" : "mykey"
-                
-                
-                }
+                 }
         }'
 ```
 You will have an answer like the following:
