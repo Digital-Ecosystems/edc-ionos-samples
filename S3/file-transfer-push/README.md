@@ -151,7 +151,7 @@ You will have an answer like the following:
 
 Copy the value of the `@id` from the response of the previous curl into this curl and execute it.
 ```
-curl -X GET -H 'X-Api-Key: password' "http://localhost:9192/management/v2/contractnegotiations/{<ID>}"
+curl -X GET -H 'X-Api-Key: password' "http://localhost:9192/management/v3/contractnegotiations/{<ID>}"
 ```
 You will have an answer like the following:
 ```
@@ -179,7 +179,7 @@ You will have an answer like the following:
 Copy the value of the `edc:contractAgreementId` from the response of the previous curl into this curl and execute it.
 ```
 
-curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
+curl -X POST "http://localhost:9192/management/v3/transferprocesses" \
         --header "Content-Type: application/json" \
         --header 'X-API-Key: password' \
         --data '{	
@@ -222,5 +222,5 @@ After executing all the steps, we can now check the `company2` bucket of our ION
 Deprovisioning 
 
 ```
-curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v2/transferprocesses/{<ID>}/deprovision"
+curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v3/transferprocesses/{<ID>}/deprovision"
 ```
