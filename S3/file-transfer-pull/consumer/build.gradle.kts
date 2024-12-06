@@ -69,6 +69,7 @@ dependencies {
 
 
     // Ionos Extensions
+    implementation("${ionosGroup}:provision-ionos-s3:${ionosVersion}")
     implementation("${ionosGroup}:data-plane-ionos-s3:${ionosVersion}")
 }
 

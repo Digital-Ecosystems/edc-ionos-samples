@@ -87,7 +87,7 @@ curl -d '{
                   },
                  "dataAddress": {
                       "type": "IonosS3",
-                      "storage": "s3-eu-central-1.ionoscloud.com",
+                      "region": "de",
                       "bucketName": "mybucket",
                       "blobname": "folder1/",
                       "filterIncludes": "device1-data.csv",
@@ -115,7 +115,7 @@ curl -d '{
                  "odrl:obligation": []
                    }
          }' -H 'X-API-Key: password' \
-		 -H 'content-type: application/json' http://localhost:8182/management/v2/policydefinitions
+		 -H 'content-type: application/json' http://localhost:8182/management/v3/policydefinitions
 ```
 
 3) Contract creation
@@ -129,12 +129,12 @@ curl -d '{
            "contractPolicyId": "aPolicy",
               "assetsSelector":[{  "operandLeft": "id", "operator": "=", "operandRight": "assetId" }]
          }' -H 'X-API-Key: password' \
- -H 'content-type: application/json' http://localhost:8182/management/v2/contractdefinitions
+ -H 'content-type: application/json' http://localhost:8182/management/v3/contractdefinitions
 ```
 
 4) Fetching the catalog
 ```console
-curl -X POST "http://localhost:9192/management/v2/catalog/request" \
+curl -X POST "http://localhost:9192/management/v3/catalog/request" \
             --header 'X-API-Key: password' \
             --header 'Content-Type: application/json' \
             -d '{
@@ -171,7 +171,7 @@ Copy the `policy{ @id` from the response of the first curl into this curl and ex
 
 ```
 curl  --location 
-      --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
+      --request POST 'http://localhost:9192/management/v3/contractnegotiations' \
       --header 'X-API-Key: password' \
       --header 'Content-Type: application/json' \
       --data-raw '{
@@ -197,7 +197,7 @@ Note: copy the `id` field;
 
 Copy the value of the `id` from the response of the previous curl into this curl and execute it.
 ```console
-curl -X GET "http://localhost:9192/management/v2/contractnegotiations/{<ID>}" \
+curl -X GET "http://localhost:9192/management/v3/contractnegotiations/{<ID>}" \
 	--header 'X-API-Key: password' \
     --header 'Content-Type: application/json' \
     -s | jq
@@ -229,7 +229,7 @@ Note: copy the `contractAgreementId` field;
 
 Copy the value of the `contractAgreementId` from the response of the previous curl into this curl and execute it.
 ```console
-curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
+curl -X POST "http://localhost:9192/management/v3/transferprocesses" \
       --header "Content-Type: application/json" \
       --header 'X-API-Key: password' \
       --data '{	
@@ -243,6 +243,7 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
            "transferType": "IonosS3-PUSH",               
            "dataDestination": { 
                     "type": "IonosS3",
+                    "region": "de",
                     "bucketName": "company2",
                     "path": "folder2/",
                     "keyName" : "mykey"
