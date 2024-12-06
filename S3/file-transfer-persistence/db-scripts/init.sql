@@ -1,74 +1,29 @@
---
---  Copyright (c) 2022 Daimler TSS GmbH
---
---  This program and the accompanying materials are made available under the
---  terms of the Apache License, Version 2.0 which is available at
---  https://www.apache.org/licenses/LICENSE-2.0
---
---  SPDX-License-Identifier: Apache-2.0
---
---  Contributors:
---       Daimler TSS GmbH - Initial SQL Query
---
 
--- THIS SCHEMA HAS BEEN WRITTEN AND TESTED ONLY FOR POSTGRES
+CREATE TABLE IF NOT EXISTS edc_accesstokendata
+(
+    id           VARCHAR NOT NULL PRIMARY KEY,
+    claim_token  JSON    NOT NULL,
+    data_address JSON    NOT NULL,
+    additional_properties JSON DEFAULT '{}'
+);
 
--- table: edc_asset
+COMMENT ON COLUMN edc_accesstokendata.claim_token IS 'ClaimToken serialized as JSON map';
+COMMENT ON COLUMN edc_accesstokendata.data_address IS 'DataAddress serialized as JSON map';
+COMMENT ON COLUMN edc_accesstokendata.additional_properties IS 'Optional Additional properties serialized as JSON map';
+
 CREATE TABLE IF NOT EXISTS edc_asset
 (
-    asset_id   VARCHAR NOT NULL,
-    created_at BIGINT  NOT NULL,
+    asset_id           VARCHAR NOT NULL,
+    created_at         BIGINT  NOT NULL,
+    properties         JSON    DEFAULT '{}',
+    private_properties JSON    DEFAULT '{}',
+    data_address       JSON    DEFAULT '{}',
     PRIMARY KEY (asset_id)
 );
 
--- table: edc_asset_dataaddress
-CREATE TABLE IF NOT EXISTS edc_asset_dataaddress
-(
-    asset_id_fk VARCHAR NOT NULL,
-    properties  JSON    NOT NULL,
-    PRIMARY KEY (asset_id_fk),
-    FOREIGN KEY (asset_id_fk) REFERENCES edc_asset (asset_id) ON DELETE CASCADE
-);
-COMMENT ON COLUMN edc_asset_dataaddress.properties IS 'DataAddress properties serialized as JSON';
-
--- table: edc_asset_property
-CREATE TABLE IF NOT EXISTS edc_asset_property
-(
-    asset_id_fk         VARCHAR NOT NULL,
-    property_name       VARCHAR NOT NULL,
-    property_value      VARCHAR NOT NULL,
-    property_type       VARCHAR NOT NULL,
-    property_is_private BOOLEAN NOT NULL,
-    PRIMARY KEY (asset_id_fk, property_name),
-    FOREIGN KEY (asset_id_fk) REFERENCES edc_asset (asset_id) ON DELETE CASCADE
-);
-
-COMMENT ON COLUMN edc_asset_property.property_name IS
-    'Asset property key';
-COMMENT ON COLUMN edc_asset_property.property_value IS
-    'Asset property value';
-COMMENT ON COLUMN edc_asset_property.property_type IS
-    'Asset property class name';
-COMMENT ON COLUMN edc_asset_property.property_is_private IS
-    'Asset property private flag';
-
-CREATE INDEX IF NOT EXISTS idx_edc_asset_property_value
-    ON edc_asset_property (property_name, property_value);
-
-
---
---  Copyright (c) 2022 Daimler TSS GmbH
---
---  This program and the accompanying materials are made available under the
---  terms of the Apache License, Version 2.0 which is available at
---  https://www.apache.org/licenses/LICENSE-2.0
---
---  SPDX-License-Identifier: Apache-2.0
---
---  Contributors:
---       Daimler TSS GmbH - Initial SQL Query
---       Microsoft Corporation - refactoring
---
+COMMENT ON COLUMN edc_asset.properties IS 'Asset properties serialized as JSON';
+COMMENT ON COLUMN edc_asset.private_properties IS 'Asset private properties serialized as JSON';
+COMMENT ON COLUMN edc_asset.data_address IS 'Asset DataAddress serialized as JSON';
 
 -- table: edc_contract_definitions
 -- only intended for and tested with H2 and Postgres!
@@ -79,9 +34,9 @@ CREATE TABLE IF NOT EXISTS edc_contract_definitions
     access_policy_id       VARCHAR NOT NULL,
     contract_policy_id     VARCHAR NOT NULL,
     assets_selector        JSON    NOT NULL,
+    private_properties     JSON,
     PRIMARY KEY (contract_definition_id)
 );
-
 
 -- Statements are designed for and tested with Postgres only!
 
@@ -122,17 +77,17 @@ CREATE TABLE IF NOT EXISTS edc_contract_agreement
 
 CREATE TABLE IF NOT EXISTS edc_contract_negotiation
 (
-    id                   VARCHAR                                            NOT NULL
+    id                   VARCHAR           NOT NULL
         CONSTRAINT contract_negotiation_pk
             PRIMARY KEY,
-    created_at           BIGINT                                             NOT NULL,
-    updated_at           BIGINT                                             NOT NULL,
+    created_at           BIGINT            NOT NULL,
+    updated_at           BIGINT            NOT NULL,
     correlation_id       VARCHAR,
-    counterparty_id      VARCHAR                                            NOT NULL,
-    counterparty_address VARCHAR                                            NOT NULL,
-    protocol             VARCHAR                                            NOT NULL,
-    type                 VARCHAR                                            NOT NULL,
-    state                INTEGER DEFAULT 0                                  NOT NULL,
+    counterparty_id      VARCHAR           NOT NULL,
+    counterparty_address VARCHAR           NOT NULL,
+    protocol             VARCHAR           NOT NULL,
+    type                 VARCHAR           NOT NULL,
+    state                INTEGER DEFAULT 0 NOT NULL,
     state_count          INTEGER DEFAULT 0,
     state_timestamp      BIGINT,
     error_detail         VARCHAR,
@@ -142,11 +97,12 @@ CREATE TABLE IF NOT EXISTS edc_contract_negotiation
     contract_offers      JSON,
     callback_addresses   JSON,
     trace_context        JSON,
+    pending              BOOLEAN DEFAULT FALSE,
+    protocol_messages    JSON,
     lease_id             VARCHAR
         CONSTRAINT contract_negotiation_lease_lease_id_fk
             REFERENCES edc_lease
-            ON DELETE SET NULL,
-    CONSTRAINT provider_correlation_id CHECK (type = '0' OR correlation_id IS NOT NULL)
+            ON DELETE SET NULL
 );
 
 COMMENT ON COLUMN edc_contract_negotiation.agreement_id IS 'ContractAgreement serialized as JSON';
@@ -166,22 +122,127 @@ CREATE UNIQUE INDEX IF NOT EXISTS contract_agreement_id_uindex
     ON edc_contract_agreement (agr_id);
 
 
+-- This will help to identify states that need to be transitioned without a table scan when the entries grow
+CREATE INDEX IF NOT EXISTS contract_negotiation_state ON edc_contract_negotiation (state,state_timestamp);
+
+CREATE TABLE IF NOT EXISTS edc_lease
+(
+    leased_by      VARCHAR NOT NULL,
+    leased_at      BIGINT,
+    lease_duration INTEGER NOT NULL,
+    lease_id       VARCHAR NOT NULL
+        CONSTRAINT lease_pk
+            PRIMARY KEY
+);
 
 
---
---  Copyright (c) 2022 ZF Friedrichshafen AG
---
---  This program and the accompanying materials are made available under the
---  terms of the Apache License, Version 2.0 which is available at
---  https://www.apache.org/licenses/LICENSE-2.0
---
---  SPDX-License-Identifier: Apache-2.0
---
---  Contributors:
---       ZF Friedrichshafen AG - Initial SQL Query
---
+CREATE TABLE IF NOT EXISTS edc_data_plane_instance
+(
+    id                   VARCHAR NOT NULL PRIMARY KEY,
+    data                 JSON,
+    lease_id             VARCHAR
+        CONSTRAINT data_plane_instance_lease_id_fk
+                    REFERENCES edc_lease
+                    ON DELETE SET NULL
+);
 
 -- Statements are designed for and tested with Postgres only!
+
+CREATE TABLE IF NOT EXISTS edc_lease
+(
+    leased_by      VARCHAR NOT NULL,
+    leased_at      BIGINT,
+    lease_duration INTEGER NOT NULL,
+    lease_id       VARCHAR NOT NULL
+        CONSTRAINT lease_pk
+            PRIMARY KEY
+);
+
+COMMENT ON COLUMN edc_lease.leased_at IS 'posix timestamp of lease';
+COMMENT ON COLUMN edc_lease.lease_duration IS 'duration of lease in milliseconds';
+
+CREATE TABLE IF NOT EXISTS edc_data_plane
+(
+    process_id           VARCHAR NOT NULL PRIMARY KEY,
+    state                INTEGER NOT NULL            ,
+    created_at           BIGINT  NOT NULL            ,
+    updated_at           BIGINT  NOT NULL            ,
+    state_count          INTEGER DEFAULT 0 NOT NULL,
+    state_time_stamp     BIGINT,
+    trace_context        JSON,
+    error_detail         VARCHAR,
+    callback_address     VARCHAR,
+    lease_id             VARCHAR
+        CONSTRAINT data_plane_lease_lease_id_fk
+                    REFERENCES edc_lease
+                    ON DELETE SET NULL,
+    source               JSON,
+    destination          JSON,
+    properties           JSON,
+    flow_type            VARCHAR
+);
+
+COMMENT ON COLUMN edc_data_plane.trace_context IS 'Java Map serialized as JSON';
+COMMENT ON COLUMN edc_data_plane.source IS 'DataAddress serialized as JSON';
+COMMENT ON COLUMN edc_data_plane.destination IS 'DataAddress serialized as JSON';
+COMMENT ON COLUMN edc_data_plane.properties IS 'Java Map serialized as JSON';
+
+-- This will help to identify states that need to be transitioned without a table scan when the entries grow
+CREATE INDEX IF NOT EXISTS data_plane_state ON edc_data_plane (state,state_time_stamp);
+
+-- Statements are designed for and tested with Postgres only!
+
+CREATE TABLE IF NOT EXISTS edc_lease
+(
+    leased_by      VARCHAR NOT NULL,
+    leased_at      BIGINT,
+    lease_duration INTEGER NOT NULL,
+    lease_id       VARCHAR NOT NULL
+        CONSTRAINT lease_pk
+            PRIMARY KEY
+);
+
+COMMENT ON COLUMN edc_lease.leased_at IS 'posix timestamp of lease';
+COMMENT ON COLUMN edc_lease.lease_duration IS 'duration of lease in milliseconds';
+
+CREATE TABLE IF NOT EXISTS edc_data_plane
+(
+    process_id           VARCHAR NOT NULL PRIMARY KEY,
+    state                INTEGER NOT NULL            ,
+    created_at           BIGINT  NOT NULL            ,
+    updated_at           BIGINT  NOT NULL            ,
+    state_count          INTEGER DEFAULT 0 NOT NULL,
+    state_time_stamp     BIGINT,
+    trace_context        JSON,
+    error_detail         VARCHAR,
+    callback_address     VARCHAR,
+    lease_id             VARCHAR
+        CONSTRAINT data_plane_lease_lease_id_fk
+                    REFERENCES edc_lease
+                    ON DELETE SET NULL,
+    source               JSON,
+    destination          JSON,
+    properties           JSON,
+    flow_type            VARCHAR
+);
+
+COMMENT ON COLUMN edc_data_plane.trace_context IS 'Java Map serialized as JSON';
+COMMENT ON COLUMN edc_data_plane.source IS 'DataAddress serialized as JSON';
+COMMENT ON COLUMN edc_data_plane.destination IS 'DataAddress serialized as JSON';
+COMMENT ON COLUMN edc_data_plane.properties IS 'Java Map serialized as JSON';
+
+-- This will help to identify states that need to be transitioned without a table scan when the entries grow
+CREATE INDEX IF NOT EXISTS data_plane_state ON edc_data_plane (state,state_time_stamp);
+
+CREATE TABLE IF NOT EXISTS edc_edr_entry
+(
+   transfer_process_id           VARCHAR NOT NULL PRIMARY KEY,
+   agreement_id                  VARCHAR NOT NULL,
+   asset_id                      VARCHAR NOT NULL,
+   provider_id                   VARCHAR NOT NULL,
+   contract_negotiation_id       VARCHAR,
+   created_at                    BIGINT  NOT NULL
+);
 
 -- table: edc_policydefinitions
 CREATE TABLE IF NOT EXISTS edc_policydefinitions
@@ -197,6 +258,7 @@ CREATE TABLE IF NOT EXISTS edc_policydefinitions
     assignee              VARCHAR,
     target                VARCHAR,
     policy_type           VARCHAR NOT NULL,
+    private_properties    JSON,
     PRIMARY KEY (policy_id)
 );
 
@@ -209,88 +271,73 @@ COMMENT ON COLUMN edc_policydefinitions.policy_type IS 'Java PolicyType serializ
 CREATE UNIQUE INDEX IF NOT EXISTS edc_policydefinitions_id_uindex
     ON edc_policydefinitions (policy_id);
 
+    -- Statements are designed for and tested with Postgres only!
 
--- Statements are designed for and tested with Postgres only!
+    CREATE TABLE IF NOT EXISTS edc_lease
+    (
+        leased_by      VARCHAR NOT NULL,
+        leased_at      BIGINT,
+        lease_duration INTEGER NOT NULL,
+        lease_id       VARCHAR NOT NULL
+            CONSTRAINT lease_pk
+                PRIMARY KEY
+    );
 
-CREATE TABLE IF NOT EXISTS edc_lease
-(
-    leased_by      VARCHAR NOT NULL,
-    leased_at      BIGINT,
-    lease_duration INTEGER NOT NULL,
-    lease_id       VARCHAR NOT NULL
-        CONSTRAINT lease_pk
-            PRIMARY KEY
-);
+    COMMENT ON COLUMN edc_lease.leased_at IS 'posix timestamp of lease';
 
-COMMENT ON COLUMN edc_lease.leased_at IS 'posix timestamp of lease';
+    COMMENT ON COLUMN edc_lease.lease_duration IS 'duration of lease in milliseconds';
 
-COMMENT ON COLUMN edc_lease.lease_duration IS 'duration of lease in milliseconds';
+    CREATE TABLE IF NOT EXISTS edc_transfer_process
+    (
+        transferprocess_id       VARCHAR           NOT NULL
+            CONSTRAINT transfer_process_pk
+                PRIMARY KEY,
+        type                       VARCHAR           NOT NULL,
+        state                      INTEGER           NOT NULL,
+        state_count                INTEGER DEFAULT 0 NOT NULL,
+        state_time_stamp           BIGINT,
+        created_at                 BIGINT            NOT NULL,
+        updated_at                 BIGINT            NOT NULL,
+        trace_context              JSON,
+        error_detail               VARCHAR,
+        resource_manifest          JSON,
+        provisioned_resource_set   JSON,
+        content_data_address       JSON,
+        deprovisioned_resources    JSON,
+        private_properties         JSON,
+        callback_addresses         JSON,
+        pending                    BOOLEAN  DEFAULT FALSE,
+        transfer_type              VARCHAR,
+        protocol_messages          JSON,
+        data_plane_id              VARCHAR,
+        correlation_id             VARCHAR,
+        counter_party_address      VARCHAR,
+        protocol                   VARCHAR,
+        asset_id                   VARCHAR,
+        contract_id                VARCHAR,
+        data_destination           JSON,
+        lease_id                   VARCHAR
+                CONSTRAINT transfer_process_lease_lease_id_fk
+                    REFERENCES edc_lease
+                    ON DELETE SET NULL
+    );
 
-CREATE TABLE IF NOT EXISTS edc_transfer_process
-(
-    transferprocess_id       VARCHAR           NOT NULL
-        CONSTRAINT transfer_process_pk
-            PRIMARY KEY,
-    type                       VARCHAR           NOT NULL,
-    state                      INTEGER           NOT NULL,
-    state_count                INTEGER DEFAULT 0 NOT NULL,
-    state_time_stamp           BIGINT,
-    created_at                 BIGINT            NOT NULL,
-    updated_at                 BIGINT            NOT NULL,
-    trace_context              JSON,
-    error_detail               VARCHAR,
-    resource_manifest          JSON,
-    provisioned_resource_set   JSON,
-    content_data_address       JSON,
-    deprovisioned_resources    JSON,
-    private_properties JSON,
-    callback_addresses         JSON,
-    lease_id                   VARCHAR
-        CONSTRAINT transfer_process_lease_lease_id_fk
-            REFERENCES edc_lease
-            ON DELETE SET NULL
-);
+    COMMENT ON COLUMN edc_transfer_process.trace_context IS 'Java Map serialized as JSON';
 
-COMMENT ON COLUMN edc_transfer_process.trace_context IS 'Java Map serialized as JSON';
+    COMMENT ON COLUMN edc_transfer_process.resource_manifest IS 'java ResourceManifest serialized as JSON';
 
-COMMENT ON COLUMN edc_transfer_process.resource_manifest IS 'java ResourceManifest serialized as JSON';
+    COMMENT ON COLUMN edc_transfer_process.provisioned_resource_set IS 'ProvisionedResourceSet serialized as JSON';
 
-COMMENT ON COLUMN edc_transfer_process.provisioned_resource_set IS 'ProvisionedResourceSet serialized as JSON';
+    COMMENT ON COLUMN edc_transfer_process.content_data_address IS 'DataAddress serialized as JSON';
 
-COMMENT ON COLUMN edc_transfer_process.content_data_address IS 'DataAddress serialized as JSON';
-
-COMMENT ON COLUMN edc_transfer_process.deprovisioned_resources IS 'List of deprovisioned resources, serialized as JSON';
+    COMMENT ON COLUMN edc_transfer_process.deprovisioned_resources IS 'List of deprovisioned resources, serialized as JSON';
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS transfer_process_id_uindex
-    ON edc_transfer_process (transferprocess_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS transfer_process_id_uindex
+        ON edc_transfer_process (transferprocess_id);
 
-CREATE TABLE IF NOT EXISTS edc_data_request
-(
-    datarequest_id      VARCHAR NOT NULL
-        CONSTRAINT data_request_pk
-            PRIMARY KEY,
-    process_id          VARCHAR NOT NULL,
-    connector_address   VARCHAR NOT NULL,
-    protocol            VARCHAR NOT NULL,
-    connector_id        VARCHAR,
-    asset_id            VARCHAR NOT NULL,
-    contract_id         VARCHAR NOT NULL,
-    data_destination    JSON    NOT NULL,
-    managed_resources   BOOLEAN DEFAULT TRUE,
-    properties          JSON,
-    transfer_process_id VARCHAR NOT NULL
-        CONSTRAINT data_request_transfer_process_id_fk
-            REFERENCES edc_transfer_process
-            ON UPDATE RESTRICT ON DELETE CASCADE
-);
+    CREATE UNIQUE INDEX IF NOT EXISTS lease_lease_id_uindex
+        ON edc_lease (lease_id);
 
-COMMENT ON COLUMN edc_data_request.data_destination IS 'DataAddress serialized as JSON';
-
-COMMENT ON COLUMN edc_data_request.properties IS 'java Map serialized as JSON';
-
-CREATE UNIQUE INDEX IF NOT EXISTS data_request_id_uindex
-    ON edc_data_request (datarequest_id);
-
-CREATE UNIQUE INDEX IF NOT EXISTS lease_lease_id_uindex
-    ON edc_lease (lease_id);
+    -- This will help to identify states that need to be transitioned without a table scan when the entries grow
+    CREATE INDEX IF NOT EXISTS transfer_process_state ON edc_transfer_process (state,state_time_stamp);

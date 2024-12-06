@@ -41,7 +41,7 @@ docker compose -f "docker-compose.yml" up --build
 We will have to call some URL's in order to transfer the file:
 1) Contract offers
 ```console
-curl -X POST "http://localhost:9192/management/v2/catalog/request" \
+curl -X POST "http://localhost:9192/management/v3/catalog/request" \
 --header 'X-API-Key: password' \
 --header 'Content-Type: application/json' \
 -d '{
@@ -100,7 +100,7 @@ You will have an output like the following:
 Copy the `odrl:hasPolicy{ @id` from the response of the first curl into this curl and execute it.
 
 ```
-curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
+curl --location --request POST 'http://localhost:9192/management/v3/contractnegotiations' \
 --header 'X-API-Key: password' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -108,26 +108,16 @@ curl --location --request POST 'http://localhost:9192/management/v2/contractnego
                "edc": "https://w3id.org/edc/v0.0.1/ns/",
                "odrl": "http://www.w3.org/ns/odrl/2/"
              },
-             "@type": "NegotiationInitiateRequestDto",
-             "connectorId": "provider",
-             "connectorAddress": "http://provider:8282/protocol",
-             "protocol": "dataspace-protocol-http",
-             "offer": {
-               "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-               "assetId": "1",
-               "policy": {"@id":<"REPLACE HERE">,
-                        "@type": "odrl:Set",
-                        "odrl:permission": {
-                            "odrl:target": "1",
-                            "odrl:action": {
-                                "odrl:type": "USE"
-                            }
-                        },
-                        "odrl:prohibition": [],
-                        "odrl:obligation": [],
-                        "odrl:target": "1"}
-             }
-}'
+            "counterPartyAddress": "http://localhost:8282/protocol",
+            "protocol": "dataspace-protocol-http",
+            "policy": {
+                  "@context": "http://www.w3.org/ns/odrl.jsonld",
+                  "@id": "Y29udHJhY3QtNjIz:YXNzZXQtMTU0:MzBiMTlhMmQtNmE2Ni00MjVjLThmZmYtMDZhZmE0NGY1YTdj",
+                  "@type": "Offer",
+                  "assigner": "provider",
+                  "target": "asset-154"
+            }
+     }'
 ```
 
 You will have an answer like the following:
@@ -150,7 +140,7 @@ You will have an answer like the following:
 
 Copy the value of the `@id` from the response of the previous curl into this curl and execute it.
 ```
-curl -X GET -H 'X-Api-Key: password' "http://localhost:9192/management/v2/contractnegotiations/{<ID>}"
+curl -X GET -H 'X-Api-Key: password' "http://localhost:9192/management/v3/contractnegotiations/{<ID>}"
 ```
 You will have an answer like the following:
 ```
@@ -203,7 +193,7 @@ docker start file-transfer-persistence-provider-1
 Copy the value of the `edc:contractAgreementId` from the response of the previous curl into this curl and execute it.
 ```
 
-curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
+curl -X POST "http://localhost:9192/management/v3/transferprocesses" \
     --header "Content-Type: application/json" \
     --header 'X-API-Key: password' \
     --data '{	
@@ -215,14 +205,13 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
             "connectorAddress": "http://provider:8282/protocol",
             "protocol": "dataspace-protocol-http",
             "contractId": "<CONTRACT AGREEMENT ID>",
-            "assetId": "1",
-            "dataDestination": { 
-                "type": "IonosS3",
-                "storage":"s3-eu-central-1.ionoscloud.com",
-                "bucketName": "company2",
-                "path": "folder2/",
-                "keyName" : "mykey"
-            }
+             "transferType": "IonosS3-PUSH",               
+                "dataDestination": { 
+                    "type": "IonosS3",
+                    "bucketName": "company2",
+                    "path": "folder2/",
+                    "keyName" : "mykey"
+                 }
         }'
 ```
 You will have an answer like the following:
@@ -247,5 +236,5 @@ After executing all the steps, we can now check the `company2` bucket of our ION
 Deprovisioning 
 
 ```
-curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v2/transferprocesses/{<ID>}/deprovision"
+curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v3/transferprocesses/{<ID>}/deprovision"
 ```
