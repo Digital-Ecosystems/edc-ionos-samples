@@ -166,11 +166,10 @@ curl -X POST "http://$CONSUMER_IP:8182/management/v3/transferprocesses" \
             },
         "@type": "TransferRequestDto",
         "connectorId": "consumer",
-        "connectorAddress": "http://$PROVIDER_IP:8282/protocol",
+        "counterPartyAddress": "http://$PROVIDER_IP:8282/protocol",
         "protocol": "dataspace-protocol-http",
         "contractId": "$CONTRACT_AGREEMENT_ID",
         "protocol": "ids-multipart",
-        "assetId": "assetId",
         "transferType": "IonosS3-PUSH",               
         "dataDestination": { 
             "type": "IonosS3",

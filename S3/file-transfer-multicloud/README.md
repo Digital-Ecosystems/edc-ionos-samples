@@ -246,7 +246,7 @@ curl -X POST "http://localhost:9192/management/v3/transferprocesses" \
                     },
 
                 "connectorId": "consumer",
-                "connectorAddress": "http://localhost:8282/protocol",
+                "counterPartyAddress": "http://localhost:8282/protocol",
                 "protocol": "dataspace-protocol-http",
                 "contractId": "<CONTRACT AGREEMENT ID>",
                 "transferType": "IonosS3-PUSH",               

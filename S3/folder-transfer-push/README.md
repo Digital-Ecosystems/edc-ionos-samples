@@ -179,23 +179,14 @@ curl  --location
           "edc": "https://w3id.org/edc/v0.0.1/ns/",
           "odrl": "http://www.w3.org/ns/odrl/2/"
         },
-        "@type": "NegotiationInitiateRequestDto",
-        "consumerId":"consumer",
-        "providerId":"provider",
-        "connectorAddress": "http://localhost:8282/protocol",
-        "protocol": "dataspace-protocol-http",
-        "offer": {
-          "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-          "assetId": "assetId",
-          "policy": {
-                  "@id":<"REPLACE WHERE">,
-                   "@type": "odrl:Set",
-            "odrl:permission": [],
-            "odrl:prohibition": [],
-            "odrl:obligation": [],
-            "odrl:target": {
-               "@id": "assetId"
-            }
+      "counterPartyAddress": "http://localhost:8282/protocol",
+      "protocol": "dataspace-protocol-http",
+      "policy": {
+              "@context": "http://www.w3.org/ns/odrl.jsonld",
+              "@id": "<"REPLACE WHERE">",
+              "@type": "Offer",
+              "assigner": "provider",
+              "target": "asset-154"
         }
       }'
 ```
@@ -245,21 +236,17 @@ curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
            "@context": {
                "edc": "https://w3id.org/edc/v0.0.1/ns/"
            },
-           "@type": "TransferRequestDto",
            "connectorId": "consumer",
-           "connectorAddress": "http://localhost:8282/protocol",
+           "counterPartyAddress": "http://localhost:8282/protocol",
            "protocol": "dataspace-protocol-http",
            "contractId": "<CONTRACT AGREEMENT ID>",
-           "assetId": "assetId",
+           "transferType": "IonosS3-PUSH",               
            "dataDestination": { 
-               "type": "IonosS3",
-               "storage":"s3-eu-central-1.ionoscloud.com",
-               "bucketName": "company2",
-               "path": "folder2/",
-               "keyName" : "mykey"
-           
-           
-                  }
+                    "type": "IonosS3",
+                    "bucketName": "company2",
+                    "path": "folder2/",
+                    "keyName" : "mykey"
+           }
           }'
 ```
 Note 1: for more details about dataDestination fields, please take a look at the [documentation](https://github.com/Digital-Ecosystems/edc-ionos-s3/blob/main/assets.md)
