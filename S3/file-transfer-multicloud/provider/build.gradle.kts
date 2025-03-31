@@ -49,48 +49,35 @@ val metaModelVersion: String by project
 
 dependencies {
 
-	implementation("${edcGroup}:control-plane-core:${edcVersion}")
-    implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
-
-    implementation("${edcGroup}:api-observability:${edcVersion}")
-	
-	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
-
-	implementation("${edcGroup}:http:${edcVersion}")
-
-	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")	
-
+    // Core
+    implementation("${edcGroup}:connector-core:${edcVersion}")
+    implementation("${edcGroup}:http:${edcVersion}")
+    implementation("${edcGroup}:dsp:${edcVersion}")
     implementation("${edcGroup}:management-api:${edcVersion}")
-		
-	implementation("${edcGroup}:vault-hashicorp:${edcVersion}")
+    implementation("${edcGroup}:api-observability:${edcVersion}")
 
-	
-	//implementation("$edcGroup:ids:+")
-		
-	implementation("${edcGroup}:iam-mock:${edcVersion}")
-	
-    //implementation(project(":example:file-transfer-multicloud:transfer-file"))
-	
-	//adjust
-   // implementation("${edcGroup}:data-plane-selector-api:${edcVersion}")
+    implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
+    implementation("${edcGroup}:vault-hashicorp:${edcVersion}")
+    implementation("${edcGroup}:iam-mock:${edcVersion}")
 
-    //implementation("${edcGroup}:data-plane-api:${edcVersion}")
-    //implementation("${edcGroup}:data-plane-http:${edcVersion}")
-	
-	implementation("${edcGroup}:dsp:${edcVersion}")
-	//file-transfer
-	implementation("${edcGroup}:control-plane-core:${edcVersion}")
-	implementation("${edcGroup}:data-plane-core:${edcVersion}")
-    implementation("${ionosGroup}:data-plane-ionos-s3:${ionosVersion}")
-    implementation("${edcGroup}:data-plane-client:${edcVersion}")
-    implementation("${edcGroup}:data-plane-selector-client:${edcVersion}")
+    // Control Plane
+    implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
+    implementation("${edcGroup}:control-plane-api:${edcVersion}")
+    implementation("${edcGroup}:control-plane-core:${edcVersion}")
+    implementation("${edcGroup}:control-api-configuration:${edcVersion}")
+
+    // Data Plane
+    implementation("${edcGroup}:data-plane-selector-api:${edcVersion}")
     implementation("${edcGroup}:data-plane-selector-core:${edcVersion}")
-    implementation("${edcGroup}:transfer-data-plane:${edcVersion}")
-	
-	//implementation("${edcGroup}:contract-spi:${edcVersion}")	
-	//implementation("${edcGroup}:policy-model:${edcVersion}")		
-	//implementation("${edcGroup}:policy-spi:${edcVersion}")	
-	//implementation("${edcGroup}:core-spi:${edcVersion}")	
+    implementation("${edcGroup}:data-plane-self-registration:${edcVersion}")
+    implementation("${edcGroup}:data-plane-control-api:${edcVersion}")
+    implementation("${edcGroup}:data-plane-public-api-v2:${edcVersion}")
+    implementation("${edcGroup}:data-plane-core:${edcVersion}")
+    implementation("${edcGroup}:data-plane-http:${edcVersion}")
+    implementation("${edcGroup}:transfer-data-plane-signaling:${edcVersion}")
+
+    implementation("org.eclipse.edc.azure:data-plane-azure-storage:0.7.2")
+    implementation("${ionosGroup}:data-plane-ionos-s3:${ionosVersion}")
 }
 
 application {

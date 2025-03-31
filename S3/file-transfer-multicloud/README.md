@@ -83,7 +83,7 @@ We will have to call some URL's in order to transfer the file:
   
   (If you want, you can adapt and execute the `runDemo3.sh` script)
 
-1) Asset creation for the consumer
+1) Asset creation for the provider
 ```console
 curl -d '{
            "@context": {
@@ -105,7 +105,7 @@ curl -d '{
             
            }
          }'  -H 'X-API-Key: password' \
-		 -H 'content-type: application/json' http://localhost:8182/management/v2/assets
+		 -H 'content-type: application/json' http://localhost:8182/management/v3/assets/
 ```
 Note: for the `account` and `keyName` fields use the output generated from the Terraform script;
 
@@ -124,7 +124,7 @@ curl -d '{
               "odrl:obligation": []
             }
 }' -H 'X-API-Key: password' \
- -H 'content-type: application/json' http://localhost:8182/management/v2/policydefinitions
+ -H 'content-type: application/json' http://localhost:8182/management/v3/policydefinitions
 ```
 
 3) Contract creation
@@ -138,12 +138,12 @@ curl -d '{
            "contractPolicyId": "aPolicy",
            "assetsSelector": []
          }' -H 'X-API-Key: password' \
- -H 'content-type: application/json' http://localhost:8182/management/v2/contractdefinitions
+ -H 'content-type: application/json' http://localhost:8182/management/v3/contractdefinitions
 ```
 
 4) Fetching the catalog
 ```console
-curl -X POST "http://localhost:9192/management/v2/catalog/request" \
+curl -X POST "http://localhost:9192/management/v3/catalog/request" \
         --header 'X-API-Key: password' \
         --header 'Content-Type: application/json' \
         -d '{
@@ -154,59 +154,29 @@ curl -X POST "http://localhost:9192/management/v2/catalog/request" \
               "protocol": "dataspace-protocol-http"
             }'
 ```
-You will have an answer like the following:
-```
-{
-	"@type": "edc:ContractNegotiationDto",
-	"@id": "a88180b3-0d66-41b5-8376-c91d8253afcf",
-	"edc:type": "CONSUMER",
-	"edc:protocol": "dataspace-protocol-http",
-	"edc:state": "FINALIZED",
-	"edc:counterPartyAddress": "http://localhost:8282/protocol",
-	"edc:callbackAddresses": [],
-	"edc:contractAgreementId": "1:1:5c0a5d3c-69ea-4fb5-9d3d-e33ec280cde9",
-	"@context": {
-		"dct": "https://purl.org/dc/terms/",
-		"edc": "https://w3id.org/edc/v0.0.1/ns/",
-		"dcat": "https://www.w3.org/ns/dcat/",
-		"odrl": "http://www.w3.org/ns/odrl/2/",
-		"dspace": "https://w3id.org/dspace/v0.8/"
-	}
-}
-```
 
 5) Contract negotiation
 Copy the `policy{ @id` from the response of the first curl into this curl and execute it.
 
 ```
-curl --location --request POST 'http://localhost:9192/management/v2/contractnegotiations' \
-        --header 'X-API-Key: password' \
-        --header 'Content-Type: application/json' \
-        --data-raw '{
-            "@context": {
-            "edc": "https://w3id.org/edc/v0.0.1/ns/",
-            "odrl": "http://www.w3.org/ns/odrl/2/"
-          },
-          "@type": "NegotiationInitiateRequestDto",
-          "connectorId": "provider",
-          "connectorAddress": "http://localhost:8282/protocol",
-          "protocol": "dataspace-protocol-http",
-          "offer": {
-            "offerId": "1:1:a345ad85-c240-4195-b954-13841a6331a1",
-            "assetId": "assetId",
-            "policy": {"@id":<"REPLACE WHERE">,
-                    "@type": "odrl:Set",
-                    "odrl:permission": {
-                        "odrl:target": "1",
-                        "odrl:action": {
-                            "odrl:type": "USE"
-                        }
-                    },
-                    "odrl:prohibition": [],
-                    "odrl:obligation": [],
-                    "odrl:target": "assetId"}
-          }
-        }'
+curl --location --request POST 'http://localhost:9192/management/v3/contractnegotiations' \
+     --header 'X-API-Key: password' \
+     --header 'Content-Type: application/json' \
+     --data-raw '{
+          "@context":{
+          "edc":"https://w3id.org/edc/v0.0.1/ns/",
+          "odrl":"http://www.w3.org/ns/odrl/2/"
+       },
+       "counterPartyAddress": "http://localhost:8282/protocol",
+       "protocol": "dataspace-protocol-http",
+       "policy": {
+              "@context": "http://www.w3.org/ns/odrl.jsonld",
+              "@id": "Y29udHJhY3QtNjIz:YXNzZXQtMTU0:MzBiMTlhMmQtNmE2Ni00MjVjLThmZmYtMDZhZmE0NGY1YTdj",
+              "@type": "Offer",
+              "assigner": "provider",
+              "target": "asset-154"
+        }
+     }'
 ```
 
 Note: copy the `id` field;
@@ -215,7 +185,7 @@ Note: copy the `id` field;
 
 Copy the value of the `id` from the response of the previous curl into this curl and execute it.
 ```console
-curl -X GET "http://localhost:9192/management/v2/contractnegotiations/{<ID>}" \
+curl -X GET "http://localhost:9192/management/v3/contractnegotiations/{<ID>}" \
         --header 'X-API-Key: password' \
         --header 'Content-Type: application/json' \
         -s | jq
@@ -247,27 +217,26 @@ Note: copy the `contractAgreementId` field;
 
 Copy the value of the `contractAgreementId` from the response of the previous curl into this curl and execute it.
 ```console
-curl -X POST "http://localhost:9192/management/v2/transferprocesses" \
+curl -X POST "http://localhost:9192/management/v3/transferprocesses" \
         --header "Content-Type: application/json" \
         --header 'X-API-Key: password' \
         --data '{	
-                 "@context": {
+                "@context": {
                     "edc": "https://w3id.org/edc/v0.0.1/ns/"
-                 },
-                 "@type": "TransferRequestDto",
-                 "connectorId": "consumer",
-                 "connectorAddress": "http://localhost:8282/protocol",
-                 "protocol": "dataspace-protocol-http",
-                 "contractId": "<CONTRACT AGREEMENT ID>",
-                 "assetId": "1",
-                    "dataDestination": { 
-                        "type": "IonosS3",
-                        "storage":"s3-eu-central-1.ionoscloud.com",
-                        "bucketName": "company2",
-                        "path": "folder2/",
-                        "keyName" : "mykey"
-                    }
-         }'
+                    },
+
+                "connectorId": "consumer",
+                "counterPartyAddress": "http://localhost:8282/protocol",
+                "protocol": "dataspace-protocol-http",
+                "contractId": "<CONTRACT AGREEMENT ID>",
+                "transferType": "IonosS3-PUSH",               
+                "dataDestination": { 
+                    "type": "IonosS3",
+                    "bucketName": "company2",
+                    "path": "folder2/",
+                    "keyName" : "mykey"
+                 }
+        }'
 ```
 Note: copy the `id` field to do the deprovisioning;
 
@@ -276,7 +245,7 @@ Accessing the bucket on the IONOS S3, you will see the `device1-data.csv` file.
 8) Deprovisioning 
 
 ```
-curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v2/transferprocesses/{<ID>}/deprovision"
+curl -X POST -H 'X-Api-Key: password' "http://localhost:9192/management/v3/transferprocesses/{<ID>}/deprovision"
 ```
 
 Note: this will delete the IONOS S3 token from IONOS Cloud.

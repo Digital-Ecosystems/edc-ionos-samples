@@ -45,38 +45,11 @@ val rsApi: String by project
 val metaModelVersion: String by project
 
 dependencies {
-    implementation("${edcGroup}:asset-index-sql:$edcVersion")
-    implementation("${edcGroup}:policy-definition-store-sql:$edcVersion")
-    implementation("${edcGroup}:contract-definition-store-sql:$edcVersion")
-    implementation("${edcGroup}:contract-negotiation-store-sql:$edcVersion")
-    implementation("${edcGroup}:transfer-process-store-sql:$edcVersion")
-    implementation("${edcGroup}:transaction-datasource-spi:$edcVersion")
-    implementation("${edcGroup}:sql-pool-apache-commons:$edcVersion")
-    implementation("${edcGroup}:transaction-local:$edcVersion")
-    implementation("${postgresqlGroup}:postgresql:$postgresqlVersion")
-    implementation("${edcGroup}:control-plane-sql:$edcVersion")
 
-	implementation("${edcGroup}:control-plane-core:${edcVersion}")
-    implementation("${edcGroup}:control-plane-api-client:${edcVersion}")
-
-    implementation("${edcGroup}:api-observability:${edcVersion}")
-	
-	implementation("${edcGroup}:configuration-filesystem:${edcVersion}")
-
-	implementation("${edcGroup}:http:${edcVersion}")
-
-	implementation("${edcGroup}:auth-tokenbased:${edcVersion}")	
-
-    implementation("${edcGroup}:management-api:${edcVersion}")
-	
-	implementation("${edcGroup}:vault-hashicorp:${edcVersion}")	
-
-	implementation("${edcGroup}:iam-mock:${edcVersion}")
 	
     implementation(project(":S3:file-transfer-persistence:transfer-file"))
 	
-	//new
-	implementation("${edcGroup}:dsp:${edcVersion}")
+
 	
 }
 

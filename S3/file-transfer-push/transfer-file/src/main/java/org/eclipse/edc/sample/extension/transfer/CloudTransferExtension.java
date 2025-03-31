@@ -14,20 +14,22 @@
 
  package org.eclipse.edc.sample.extension.transfer;
 
- import org.eclipse.edc.connector.contract.spi.offer.store.ContractDefinitionStore;
- import org.eclipse.edc.connector.contract.spi.types.offer.ContractDefinition;
- import org.eclipse.edc.connector.policy.spi.PolicyDefinition;
- import org.eclipse.edc.connector.policy.spi.store.PolicyDefinitionStore;
+ import org.eclipse.edc.connector.controlplane.asset.spi.domain.Asset;
+ import org.eclipse.edc.connector.controlplane.asset.spi.index.AssetIndex;
+ import org.eclipse.edc.connector.controlplane.contract.spi.offer.store.ContractDefinitionStore;
+ import org.eclipse.edc.connector.controlplane.contract.spi.types.offer.ContractDefinition;
+ import org.eclipse.edc.connector.controlplane.policy.spi.PolicyDefinition;
+ import org.eclipse.edc.connector.controlplane.policy.spi.store.PolicyDefinitionStore;
  import org.eclipse.edc.policy.model.Action;
  import org.eclipse.edc.policy.model.Permission;
  import org.eclipse.edc.policy.model.Policy;
  import org.eclipse.edc.runtime.metamodel.annotation.Inject;
  import org.eclipse.edc.spi.EdcException;
- import org.eclipse.edc.spi.asset.AssetIndex;
+
  import org.eclipse.edc.spi.system.ServiceExtension;
  import org.eclipse.edc.spi.system.ServiceExtensionContext;
  import org.eclipse.edc.spi.types.domain.DataAddress;
- import org.eclipse.edc.spi.types.domain.asset.Asset;
+
 
  import static com.ionos.edc.extension.s3.schema.IonosBucketSchema.*;
  import static org.eclipse.edc.spi.query.Criterion.criterion;
@@ -50,13 +52,13 @@
          policyDefinitionStore.create(policy);
  
          registerDataEntries();
-         registerContractDefinition(policy.getUid());
+         registerContractDefinition(policy.getId());
      }
  
      public void registerDataEntries() {
          try {
              var dataAddress = DataAddress.Builder.newInstance().type("IonosS3")
-                     .property(STORAGE_NAME, "s3-eu-central-1.ionoscloud.com")
+                     .property(REGION_ID, "s3-eu-central-1.ionoscloud.com")
                      .property(BUCKET_NAME, "company1")
                      .property(BLOB_NAME, "device1-data.csv")
                      .keyName("device1").build();
